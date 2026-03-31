@@ -1,26 +1,41 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dark: #8A6A1E;
+  --ink: #1A1410;
+  --parchment: #F5EDD8;
+  --parchment-dark: #E8D9B5;
+  --parchment-deeper: #D4C090;
+  --blood: #8B1A1A;
+  --blood-light: #C2442A;
+  --stone: #3A3228;
+  --stone-light: #5A4E3C;
+  --ember: #D4601A;
+  --text-primary: #2C1F0E;
+  --text-secondary: #5C4A2A;
+  --text-muted: #8A7250;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-crimson), Georgia, serif;
+  background: var(--ink);
+  color: var(--parchment);
+  overflow-x: hidden;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flicker {
+  0%   { opacity: 0.7; transform: scale(1); }
+  50%  { opacity: 1;   transform: scale(1.05); }
+  100% { opacity: 0.8; transform: scale(0.97); }
 }
