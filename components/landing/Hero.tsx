@@ -7,7 +7,7 @@ export default function Hero() {
       display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center",
       textAlign: "center",
-      padding: "8rem 2rem 6rem",
+      padding: "clamp(5rem, 10vh, 8rem) 2rem clamp(4rem, 8vh, 6rem)",
       position: "relative",
       overflow: "hidden",
     }}>
@@ -64,7 +64,7 @@ export default function Hero() {
           fontSize: "clamp(1.8rem, 4vw, 3.5rem)",
           color: "var(--parchment-dark)",
           fontFamily: "var(--font-cinzel), serif",
-          fontWeight: 400, letterSpacing: "0.3em",
+          fontWeight: 400, letterSpacing: "clamp(0.05em, 1.5vw, 0.3em)",
           marginTop: "0.3em",
           textShadow: "none",
         }}>
@@ -74,7 +74,7 @@ export default function Hero() {
 
       {/* Divisor */}
       <div style={{
-        width: 320, height: 1, margin: "2.5rem auto",
+        width: "min(320px, 80%)", height: 1, margin: "2.5rem auto",
         position: "relative", zIndex: 1,
         background: "linear-gradient(to right, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent)",
         animation: "fadeUp 0.8s 0.7s both",
@@ -97,7 +97,7 @@ export default function Hero() {
         animation: "fadeUp 0.8s 1.1s both",
         flexWrap: "wrap", justifyContent: "center",
       }}>
-        <Link href="/dashboard" style={{
+        <Link href="/register" style={{
           fontFamily: "var(--font-cinzel), serif",
           fontSize: "0.85rem", letterSpacing: "0.15em",
           textTransform: "uppercase", color: "var(--ink)",

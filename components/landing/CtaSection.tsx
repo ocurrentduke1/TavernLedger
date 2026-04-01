@@ -43,7 +43,7 @@ export default function CtaSection() {
           justifyContent: "center", flexWrap: "wrap",
           position: "relative", zIndex: 1,
         }}>
-          <Link href="/dashboard" style={{
+          <Link href="/register" style={{
             fontFamily: "var(--font-cinzel), serif",
             fontSize: "0.85rem", letterSpacing: "0.15em",
             textTransform: "uppercase", color: "var(--ink)",

@@ -19,11 +19,71 @@ const dice = ["d4", "d6", "d8", "d10", "d12", "d20"];
 export default function CharacterPreview() {
   return (
     <section style={{
-      padding: "8rem 4rem",
+      padding: "clamp(4rem, 8vw, 8rem) clamp(1.2rem, 5vw, 4rem)",
       background: "var(--ink)",
       textAlign: "center",
       position: "relative",
     }}>
+      <style>{`
+        .char-grid {
+          display: grid;
+          grid-template-columns: 200px 1fr 160px;
+          gap: 1.5rem;
+          text-align: left;
+        }
+
+        /* Tablet: avatar + stats en fila, dados abajo en fila */
+        @media (max-width: 860px) {
+          .char-grid {
+            grid-template-columns: 180px 1fr;
+          }
+          .char-dice {
+            grid-column: 1 / -1;
+            flex-direction: row !important;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem !important;
+          }
+          .char-dice-label {
+            width: 100%;
+          }
+          .char-dice-result {
+            margin-left: auto;
+          }
+        }
+
+        /* Móvil: todo apilado */
+        @media (max-width: 560px) {
+          .char-grid {
+            grid-template-columns: 1fr;
+          }
+          .char-frame {
+            padding: 1rem !important;
+          }
+          /* Avatar en fila horizontal */
+          .char-avatar {
+            flex-direction: row !important;
+            align-items: flex-start !important;
+            gap: 1rem !important;
+          }
+          .char-avatar-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+          /* Dados en grid 3x2 */
+          .char-dice {
+            grid-column: 1 / -1;
+          }
+          .char-dice-buttons {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.4rem;
+            width: 100%;
+          }
+        }
+      `}</style>
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 4,
         background: "linear-gradient(to right, transparent, var(--blood), transparent)",
@@ -31,7 +91,7 @@ export default function CharacterPreview() {
 
       <p style={{
         fontFamily: "var(--font-cinzel), serif",
-        fontSize: "0.7rem", letterSpacing: "0.4em",
+        fontSize: "0.7rem", letterSpacing: "clamp(0.1em, 1.5vw, 0.4em)",
         textTransform: "uppercase", color: "var(--gold)",
         marginBottom: "1rem",
       }}>
@@ -49,27 +109,22 @@ export default function CharacterPreview() {
       <p style={{
         fontSize: "1.15rem", fontStyle: "italic",
         color: "var(--parchment-deeper)",
-        maxWidth: 500, margin: "0 auto 4rem", lineHeight: 1.7,
+        maxWidth: 500, margin: "0 auto clamp(2rem, 4vw, 4rem)", lineHeight: 1.7,
       }}>
         Una interfaz diseñada para el campo de batalla y la taberna por igual.
       </p>
 
       {/* Frame */}
-      <div style={{
+      <div className="char-frame" style={{
         maxWidth: 900, margin: "0 auto",
         border: "1px solid rgba(201,168,76,0.25)",
         background: "rgba(58,50,40,0.6)",
         padding: "2.5rem",
       }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "200px 1fr 160px",
-          gap: "1.5rem",
-          textAlign: "left",
-        }}>
+        <div className="char-grid">
 
           {/* Avatar */}
-          <div style={{
+          <div className="char-avatar" style={{
             background: "rgba(26,20,16,0.8)",
             border: "1px solid rgba(201,168,76,0.2)",
             padding: "1.5rem",
@@ -77,37 +132,39 @@ export default function CharacterPreview() {
             alignItems: "center", gap: "1rem",
           }}>
             <div style={{
-              width: 80, height: 80, borderRadius: "50%",
+              width: 80, height: 80, borderRadius: "50%", flexShrink: 0,
               background: "linear-gradient(135deg, var(--stone), var(--ink))",
               border: "2px solid var(--gold-dark)",
               display: "flex", alignItems: "center", justifyContent: "center",
               fontFamily: "'Cinzel Decorative', serif",
               fontSize: "1.8rem", color: "var(--gold)",
             }}>⚔</div>
-            <div style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.9rem", color: "var(--gold-light)", textAlign: "center" }}>
-              Aelindra Voss
-            </div>
-            <div style={{ fontSize: "0.8rem", color: "var(--parchment-deeper)", fontStyle: "italic", textAlign: "center" }}>
-              Elfa · Ranger · Nv. 7
-            </div>
+            <div className="char-avatar-info">
+              <div style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.9rem", color: "var(--gold-light)", textAlign: "center" }}>
+                Aelindra Voss
+              </div>
+              <div style={{ fontSize: "0.8rem", color: "var(--parchment-deeper)", fontStyle: "italic", textAlign: "center" }}>
+                Elfa · Ranger · Nv. 7
+              </div>
 
-            {/* HP Bar */}
-            <div style={{ width: "100%" }}>
-              <div style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.65rem", color: "var(--blood-light)", letterSpacing: "0.1em", marginBottom: 4 }}>
-                Puntos de Vida — 52 / 72
+              {/* HP Bar */}
+              <div style={{ width: "100%" }}>
+                <div style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.65rem", color: "var(--blood-light)", letterSpacing: "0.1em", marginBottom: 4 }}>
+                  Puntos de Vida — 52 / 72
+                </div>
+                <div style={{ height: 8, background: "rgba(139,26,26,0.3)", borderRadius: 1 }}>
+                  <div style={{ height: "100%", width: "72%", background: "var(--blood-light)", borderRadius: 1 }} />
+                </div>
               </div>
-              <div style={{ height: 8, background: "rgba(139,26,26,0.3)", borderRadius: 1 }}>
-                <div style={{ height: "100%", width: "72%", background: "var(--blood-light)", borderRadius: 1 }} />
-              </div>
-            </div>
 
-            {/* Spell Slots */}
-            <div style={{ width: "100%" }}>
-              <div style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.65rem", color: "var(--gold)", letterSpacing: "0.1em", marginBottom: 4 }}>
-                Spell Slots · 3/4
-              </div>
-              <div style={{ height: 8, background: "rgba(201,168,76,0.15)", borderRadius: 1 }}>
-                <div style={{ height: "100%", width: "75%", background: "var(--gold-dark)", borderRadius: 1 }} />
+              {/* Spell Slots */}
+              <div style={{ width: "100%" }}>
+                <div style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.65rem", color: "var(--gold)", letterSpacing: "0.1em", marginBottom: 4 }}>
+                  Spell Slots · 3/4
+                </div>
+                <div style={{ height: 8, background: "rgba(201,168,76,0.15)", borderRadius: 1 }}>
+                  <div style={{ height: "100%", width: "75%", background: "var(--gold-dark)", borderRadius: 1 }} />
+                </div>
               </div>
             </div>
           </div>
@@ -164,29 +221,31 @@ export default function CharacterPreview() {
           </div>
 
           {/* Dados */}
-          <div style={{
+          <div className="char-dice" style={{
             background: "rgba(26,20,16,0.8)",
             border: "1px solid rgba(201,168,76,0.2)",
             padding: "1.5rem",
             display: "flex", flexDirection: "column", gap: "0.8rem",
           }}>
-            <div style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.65rem", letterSpacing: "0.1em", color: "var(--gold)", textTransform: "uppercase", marginBottom: "0.3rem" }}>
+            <div className="char-dice-label" style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.65rem", letterSpacing: "0.1em", color: "var(--gold)", textTransform: "uppercase", marginBottom: "0.3rem" }}>
               Lanzar Dado
             </div>
-            {dice.map((d) => (
-              <div key={d} style={{
-                background: d === "d20" ? "rgba(201,168,76,0.15)" : "rgba(201,168,76,0.08)",
-                border: d === "d20" ? "1px solid rgba(201,168,76,0.4)" : "1px solid rgba(201,168,76,0.2)",
-                color: d === "d20" ? "var(--gold)" : "var(--gold-light)",
-                fontFamily: "var(--font-cinzel), serif",
-                fontSize: "0.75rem", padding: "0.5rem",
-                textAlign: "center", cursor: "pointer",
-                letterSpacing: "0.05em",
-              }}>
-                {d}
-              </div>
-            ))}
-            <div style={{
+            <div className="char-dice-buttons" style={{ display: "contents" }}>
+              {dice.map((d) => (
+                <div key={d} style={{
+                  background: d === "d20" ? "rgba(201,168,76,0.15)" : "rgba(201,168,76,0.08)",
+                  border: d === "d20" ? "1px solid rgba(201,168,76,0.4)" : "1px solid rgba(201,168,76,0.2)",
+                  color: d === "d20" ? "var(--gold)" : "var(--gold-light)",
+                  fontFamily: "var(--font-cinzel), serif",
+                  fontSize: "0.75rem", padding: "0.5rem",
+                  textAlign: "center", cursor: "pointer",
+                  letterSpacing: "0.05em",
+                }}>
+                  {d}
+                </div>
+              ))}
+            </div>
+            <div className="char-dice-result" style={{
               background: "rgba(139,26,26,0.2)",
               border: "1px solid rgba(139,26,26,0.3)",
               padding: "0.8rem", textAlign: "center",

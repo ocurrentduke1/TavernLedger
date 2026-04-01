@@ -86,7 +86,7 @@ const features = [
 export default function Features() {
   return (
     <section id="features" style={{
-      padding: "8rem 4rem",
+      padding: "clamp(4rem, 8vw, 8rem) clamp(1.2rem, 5vw, 4rem)",
       position: "relative",
       background: "var(--stone)",
     }}>
@@ -117,7 +117,7 @@ export default function Features() {
       <p style={{
         textAlign: "center", fontSize: "1.15rem",
         fontStyle: "italic", color: "var(--parchment-deeper)",
-        maxWidth: 500, margin: "0 auto 5rem", lineHeight: 1.7,
+        maxWidth: 500, margin: "0 auto clamp(2.5rem, 5vw, 5rem)", lineHeight: 1.7,
       }}>
         Desde la creación de tu héroe hasta el seguimiento de la última batalla.
       </p>
@@ -130,7 +130,7 @@ export default function Features() {
         {features.map((f) => (
           <div key={f.title} style={{
             background: "rgba(26,20,16,0.6)",
-            padding: "3rem 2.5rem",
+            padding: "clamp(1.5rem, 4vw, 3rem) clamp(1.2rem, 3vw, 2.5rem)",
             border: "1px solid rgba(201,168,76,0.12)",
             transition: "background 0.3s, border-color 0.3s",
             cursor: "default",
