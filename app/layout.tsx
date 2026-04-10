@@ -29,6 +29,7 @@ export default function RootLayout({
     <html
       lang="es"
       className={`${cinzel.variable} ${crimsonPro.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
