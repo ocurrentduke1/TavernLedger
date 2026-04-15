@@ -68,16 +68,21 @@ export default function NewCharacterPage() {
     const fetchCampaigns = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const { data } = await supabase
+
+      const { data, error } = await supabase
         .from("campaigns")
         .select("id, name")
         .eq("dm_id", user.id)
         .eq("status", "active")
         .order("name");
+
+      if (error) {
+        console.error("Error fetching campaigns:", error);
+      }
       setCampaigns(data ?? []);
     };
     fetchCampaigns();
-  }, []);
+  }, [supabase]);
 
   const handleAbility = (key: AbilityKey, val: string) => {
     const n = Math.min(20, Math.max(1, Number(val) || 10));
@@ -89,8 +94,17 @@ export default function NewCharacterPage() {
     setLoading(true);
     setError("");
 
+    if (!name.trim()) {
+      setError("El nombre del personaje es requerido.");
+      setLoading(false);
+      return;
+    }
+
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { router.push("/login"); return; }
+    if (!user) {
+      router.push("/login");
+      return;
+    }
 
     const { error: err } = await supabase.from("characters").insert({
       user_id: user.id,
@@ -109,13 +123,13 @@ export default function NewCharacterPage() {
     });
 
     if (err) {
-      setError("No se pudo crear el personaje. Intenta de nuevo.");
+      setError("No se pudo crear el personaje. Verifica los datos e intenta de nuevo.");
+      console.error("Character creation error:", err);
       setLoading(false);
       return;
     }
 
     router.push("/dashboard/characters");
-    router.refresh();
   };
 
   const inputStyle = {

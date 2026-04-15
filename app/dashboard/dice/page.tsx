@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 type DieType = "d4" | "d6" | "d8" | "d10" | "d12" | "d20" | "d100";
 
@@ -41,6 +42,7 @@ function formatTime(iso: string) {
 
 export default function DicePage() {
   const supabase = createClient();
+  const router = useRouter();
 
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedDie, setSelectedDie] = useState<DieType>("d20");
@@ -59,9 +61,12 @@ export default function DicePage() {
   useEffect(() => {
     const init = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        router.push("/login");
+        return;
+      }
 
-      const [{ data: chars }, { data: rolls }] = await Promise.all([
+      const [{ data: chars, error: charsError }, { data: rolls, error: rollsError }] = await Promise.all([
         supabase
           .from("characters")
           .select("id, name, class")
@@ -70,9 +75,13 @@ export default function DicePage() {
         supabase
           .from("dice_rolls")
           .select("id, dice_type, result, modifier, rolled_at, character_id")
+          .eq("user_id", user.id)
           .order("rolled_at", { ascending: false })
           .limit(30),
       ]);
+
+      if (charsError) console.error("Error fetching characters:", charsError);
+      if (rollsError) console.error("Error fetching rolls:", rollsError);
 
       setCharacters(chars ?? []);
       setHistory(rolls ?? []);
@@ -99,8 +108,9 @@ export default function DicePage() {
         clearInterval(intervalRef.current!);
         setDisplayResult(rolled);
         setFinalResult(rolled);
-        setRolling(false);
-        persistRoll(rolled);
+        persistRoll(rolled).finally(() => {
+          setRolling(false);
+        });
       }
     }, 50);
   };
@@ -109,9 +119,10 @@ export default function DicePage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const { data: newRoll } = await supabase
+    const { data: newRoll, error } = await supabase
       .from("dice_rolls")
       .insert({
+        user_id: user.id,
         dice_type: selectedDie,
         result: rolled,
         modifier,
@@ -119,6 +130,11 @@ export default function DicePage() {
       })
       .select("id, dice_type, result, modifier, rolled_at, character_id")
       .single();
+
+    if (error) {
+      console.error("Error saving roll:", error);
+      return;
+    }
 
     if (newRoll) {
       setHistory(prev => [newRoll, ...prev].slice(0, 30));

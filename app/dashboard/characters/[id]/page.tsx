@@ -72,69 +72,138 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { router.push("/login"); return; }
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          router.push("/login");
+          return;
+        }
 
-      const [{ data: charData }, { data: campData }] = await Promise.all([
-        supabase.from("characters").select("*").eq("id", id).eq("user_id", user.id).single(),
-        supabase.from("campaigns").select("id, name").eq("dm_id", user.id).eq("status", "active"),
-      ]);
+        const [{ data: charData, error: charError }, { data: campData, error: campError }] = await Promise.all([
+          supabase.from("characters").select("*").eq("id", id).eq("user_id", user.id).single(),
+          supabase.from("campaigns").select("id, name").eq("dm_id", user.id).eq("status", "active"),
+        ]);
 
-      if (!charData) { router.push("/dashboard/characters"); return; }
+        if (charError) {
+          if (charError.code === "PGRST116") {
+            router.push("/dashboard/characters");
+            return;
+          }
+          throw charError;
+        }
 
-      setChar(charData);
-      setDraft(charData);
-      setCampaigns(campData ?? []);
-      setLoading(false);
+        if (!charData) {
+          router.push("/dashboard/characters");
+          return;
+        }
+
+        setChar(charData);
+        setDraft(charData);
+        setCampaigns(campData ?? []);
+      } catch (err) {
+        console.error("Error loading character:", err);
+        setError("No se pudo cargar el personaje.");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
-  }, [id]);
+  }, [id, supabase, router]);
 
   const handleSave = async () => {
     if (!draft) return;
     setSaving(true);
     setError("");
 
-    const { error: err } = await supabase
-      .from("characters")
-      .update({
-        name: draft.name,
-        race: draft.race,
-        class: draft.class,
-        level: draft.level,
-        hp_current: draft.hp_current,
-        hp_max: draft.hp_max,
-        spell_slots_current: draft.spell_slots_current,
-        spell_slots_max: draft.spell_slots_max,
-        strength: draft.strength,
-        dexterity: draft.dexterity,
-        constitution: draft.constitution,
-        intelligence: draft.intelligence,
-        wisdom: draft.wisdom,
-        charisma: draft.charisma,
-        background: draft.background,
-        notes: draft.notes,
-        campaign_id: draft.campaign_id || null,
-      })
-      .eq("id", id);
+    try {
+      const { error: err } = await supabase
+        .from("characters")
+        .update({
+          name: draft.name,
+          race: draft.race,
+          class: draft.class,
+          level: draft.level,
+          hp_current: draft.hp_current,
+          hp_max: draft.hp_max,
+          spell_slots_current: draft.spell_slots_current,
+          spell_slots_max: draft.spell_slots_max,
+          strength: draft.strength,
+          dexterity: draft.dexterity,
+          constitution: draft.constitution,
+          intelligence: draft.intelligence,
+          wisdom: draft.wisdom,
+          charisma: draft.charisma,
+          background: draft.background,
+          notes: draft.notes,
+          campaign_id: draft.campaign_id || null,
+        })
+        .eq("id", id)
+        .eq("user_id", (await supabase.auth.getUser()).data.user?.id);
 
-    if (err) {
-      setError("No se pudieron guardar los cambios.");
+      if (err) {
+        setError("No se pudieron guardar los cambios.");
+        console.error("Update error:", err);
+        setSaving(false);
+        return;
+      }
+
+      setChar(draft);
+      setEditing(false);
       setSaving(false);
-      return;
+    } catch (err) {
+      setError("Ocurrió un error al guardar.");
+      console.error(err);
+      setSaving(false);
     }
-
-    setChar(draft);
-    setEditing(false);
-    setSaving(false);
   };
 
   const handleDelete = async () => {
-    if (!confirm(`¿Eliminar a "${char?.name}" permanentemente?`)) return;
+    if (!char) return;
+    if (!confirm(`¿Eliminar a "${char.name}" permanentemente?`)) return;
+
     setDeleting(true);
-    await supabase.from("characters").delete().eq("id", id);
-    router.push("/dashboard/characters");
-    router.refresh();
+    setError("");
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+
+      // Verify ownership before deleting
+      const { data: charToDelete } = await supabase
+        .from("characters")
+        .select("user_id")
+        .eq("id", id)
+        .eq("user_id", user.id)
+        .single();
+
+      if (!charToDelete) {
+        setError("No tienes permiso para eliminar este personaje.");
+        setDeleting(false);
+        return;
+      }
+
+      const { error: err } = await supabase
+        .from("characters")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", user.id);
+
+      if (err) {
+        setError("No se pudo eliminar el personaje.");
+        console.error("Delete error:", err);
+        setDeleting(false);
+        return;
+      }
+
+      router.push("/dashboard/characters");
+    } catch (err) {
+      setError("Ocurrió un error al eliminar.");
+      console.error(err);
+      setDeleting(false);
+    }
   };
 
   const setDraftField = (field: keyof Character, value: unknown) => {

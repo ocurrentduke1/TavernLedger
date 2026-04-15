@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 type Character = {
@@ -17,25 +18,40 @@ type Character = {
 export default function CharactersPage() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const supabase = createClient();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCharacters = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          router.push("/login");
+          return;
+        }
 
-      const { data } = await supabase
-        .from("characters")
-        .select("id, name, race, class, level, hp_current, hp_max")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+        const { data, error: err } = await supabase
+          .from("characters")
+          .select("id, name, race, class, level, hp_current, hp_max")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
 
-      setCharacters(data ?? []);
-      setLoading(false);
+        if (err) {
+          throw err;
+        }
+
+        setCharacters(data ?? []);
+      } catch (err) {
+        console.error("Error fetching characters:", err);
+        setError("No se pudieron cargar los personajes.");
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchCharacters();
-  }, []);
+  }, [supabase, router]);
 
   if (loading) return (
     <div style={{ padding: "3rem" }}>
@@ -44,6 +60,17 @@ export default function CharactersPage() {
         fontFamily: "var(--font-cinzel), serif", fontSize: "0.85rem",
       }}>
         Cargando personajes...
+      </p>
+    </div>
+  );
+
+  if (error) return (
+    <div style={{ padding: "3rem" }}>
+      <p style={{
+        fontStyle: "italic", color: "var(--blood-light)",
+        fontFamily: "var(--font-cinzel), serif", fontSize: "0.85rem",
+      }}>
+        {error}
       </p>
     </div>
   );
