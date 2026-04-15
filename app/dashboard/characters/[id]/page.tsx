@@ -28,6 +28,11 @@ const CLASSES = [
   "Brujo", "Mago", "Otro",
 ];
 
+const ITEM_TYPES = [
+  "Arma", "Armadura", "Escudo", "Mochila", "Poción", "Pergamino",
+  "Joya", "Herramienta", "Munición", "Libro", "Cantrip", "Consumible", "Otro",
+];
+
 type Character = {
   id: string;
   name: string;
@@ -51,6 +56,17 @@ type Character = {
 
 type Campaign = { id: string; name: string };
 
+type InventoryItem = {
+  id: string;
+  character_id: string;
+  name: string;
+  type: string | null;
+  damage: string | null;
+  weight: number | null;
+  description: string | null;
+  equipped: boolean;
+};
+
 function modifier(score: number) {
   const mod = Math.floor((score - 10) / 2);
   return mod >= 0 ? `+${mod}` : `${mod}`;
@@ -69,6 +85,24 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
   const [draft, setDraft] = useState<Character | null>(null);
+
+  // Inventory state
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
+  const [loadingInventory, setLoadingInventory] = useState(false);
+  const [showAddItemForm, setShowAddItemForm] = useState(false);
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
+  const [savingItem, setSavingItem] = useState(false);
+  const [itemError, setItemError] = useState("");
+
+  // New item form state
+  const [newItem, setNewItem] = useState({
+    name: "",
+    type: "",
+    damage: "",
+    weight: "",
+    description: "",
+    equipped: false,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,6 +134,20 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
         setChar(charData);
         setDraft(charData);
         setCampaigns(campData ?? []);
+
+        // Fetch inventory
+        const { data: invData, error: invError } = await supabase
+          .from("inventory")
+          .select("*")
+          .eq("character_id", id)
+          .order("equipped", { ascending: false })
+          .order("name");
+
+        if (invError) {
+          console.error("Error fetching inventory:", invError);
+        }
+
+        setInventory(invData ?? []);
       } catch (err) {
         console.error("Error loading character:", err);
         setError("No se pudo cargar el personaje.");
@@ -171,7 +219,6 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
         return;
       }
 
-      // Verify ownership before deleting
       const { data: charToDelete } = await supabase
         .from("characters")
         .select("user_id")
@@ -203,6 +250,94 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
       setError("Ocurrió un error al eliminar.");
       console.error(err);
       setDeleting(false);
+    }
+  };
+
+  // Inventory handlers
+  const handleAddItem = async () => {
+    if (!newItem.name.trim() || !char) {
+      setItemError("El nombre del item es requerido.");
+      return;
+    }
+
+    setSavingItem(true);
+    setItemError("");
+
+    try {
+      const { data: item, error: err } = await supabase
+        .from("inventory")
+        .insert({
+          character_id: char.id,
+          name: newItem.name,
+          type: newItem.type || null,
+          damage: newItem.damage || null,
+          weight: newItem.weight ? Number(newItem.weight) : null,
+          description: newItem.description || null,
+          equipped: newItem.equipped,
+        })
+        .select()
+        .single();
+
+      if (err) {
+        setItemError("No se pudo añadir el item.");
+        console.error("Add item error:", err);
+        setSavingItem(false);
+        return;
+      }
+
+      setInventory(prev => [item, ...prev].sort((a, b) => {
+        if (b.equipped !== a.equipped) return b.equipped ? 1 : -1;
+        return a.name.localeCompare(b.name);
+      }));
+
+      setNewItem({ name: "", type: "", damage: "", weight: "", description: "", equipped: false });
+      setShowAddItemForm(false);
+      setSavingItem(false);
+    } catch (err) {
+      setItemError("Ocurrió un error.");
+      console.error(err);
+      setSavingItem(false);
+    }
+  };
+
+  const handleDeleteItem = async (itemId: string) => {
+    if (!confirm("¿Eliminar este item?")) return;
+
+    try {
+      const { error: err } = await supabase
+        .from("inventory")
+        .delete()
+        .eq("id", itemId)
+        .eq("character_id", char?.id);
+
+      if (err) {
+        setItemError("No se pudo eliminar el item.");
+        console.error(err);
+        return;
+      }
+
+      setInventory(prev => prev.filter(i => i.id !== itemId));
+    } catch (err) {
+      setItemError("Ocurrió un error al eliminar.");
+      console.error(err);
+    }
+  };
+
+  const handleToggleEquipped = async (itemId: string, currentEquipped: boolean) => {
+    try {
+      const { error: err } = await supabase
+        .from("inventory")
+        .update({ equipped: !currentEquipped })
+        .eq("id", itemId);
+
+      if (err) throw err;
+
+      setInventory(prev => prev.map(i => i.id === itemId ? { ...i, equipped: !currentEquipped } : i).sort((a, b) => {
+        if (b.equipped !== a.equipped) return b.equipped ? 1 : -1;
+        return a.name.localeCompare(b.name);
+      }));
+    } catch (err) {
+      console.error("Error toggling equipped:", err);
     }
   };
 
@@ -529,6 +664,198 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
             </div>
           ))}
         </div>
+
+        {/* — Inventario — */}
+        <p style={sectionTitle}>Equipo e Inventario</p>
+
+        {itemError && (
+          <p style={{
+            fontSize: "0.85rem", color: "var(--blood-light)",
+            marginBottom: "1rem", fontStyle: "italic",
+          }}>
+            {itemError}
+          </p>
+        )}
+
+        {/* Items list */}
+        {inventory.length > 0 ? (
+          <div style={{ marginBottom: "1.5rem", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+            {inventory.map(item => (
+              <div key={item.id} style={{
+                display: "flex", alignItems: "center", gap: "0.8rem",
+                padding: "0.8rem 1rem",
+                background: "rgba(26,20,16,0.6)",
+                border: `1px solid ${item.equipped ? "rgba(201,168,76,0.3)" : "rgba(201,168,76,0.08)"}`,
+              }}>
+                {/* Equipped toggle */}
+                <button
+                  onClick={() => handleToggleEquipped(item.id, item.equipped)}
+                  style={{
+                    width: 32, height: 32,
+                    background: item.equipped ? "var(--gold)" : "rgba(201,168,76,0.1)",
+                    border: `1px solid ${item.equipped ? "var(--gold)" : "rgba(201,168,76,0.2)"}`,
+                    color: item.equipped ? "var(--ink)" : "var(--parchment-deeper)",
+                    cursor: "pointer",
+                    fontWeight: item.equipped ? 700 : 400,
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  {item.equipped ? "✓" : "—"}
+                </button>
+
+                {/* Item info */}
+                <div style={{ flex: 1 }}>
+                  <div style={{
+                    fontFamily: "'Cinzel Decorative', serif",
+                    fontSize: "0.95rem", color: "var(--parchment)",
+                  }}>
+                    {item.name}
+                  </div>
+                  <div style={{
+                    fontFamily: "var(--font-cinzel), serif",
+                    fontSize: "0.65rem", color: "var(--text-muted)",
+                    letterSpacing: "0.05em",
+                  }}>
+                    {[item.type, item.damage && `${item.damage} daño`, item.weight && `${item.weight} kg`]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </div>
+                  {item.description && (
+                    <div style={{
+                      fontFamily: "var(--font-crimson), serif",
+                      fontSize: "0.8rem", color: "var(--parchment-deeper)",
+                      fontStyle: "italic", marginTop: "0.3rem",
+                    }}>
+                      {item.description}
+                    </div>
+                  )}
+                </div>
+
+                {/* Delete button */}
+                <button
+                  onClick={() => handleDeleteItem(item.id)}
+                  style={{
+                    fontFamily: "var(--font-cinzel), serif",
+                    fontSize: "0.65rem", letterSpacing: "0.1em",
+                    textTransform: "uppercase", color: "var(--blood-light)",
+                    background: "transparent", border: "none",
+                    padding: "0.3rem 0.6rem", cursor: "pointer",
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p style={{
+            fontStyle: "italic", color: "var(--text-muted)",
+            fontSize: "0.9rem", marginBottom: "1.5rem",
+          }}>
+            Sin items. ¡Empieza a equiparte!
+          </p>
+        )}
+
+        {/* Add item button/form */}
+        {showAddItemForm ? (
+          <div style={{
+            background: "rgba(26,20,16,0.8)",
+            border: "1px solid rgba(201,168,76,0.2)",
+            padding: "1.2rem",
+            marginBottom: "1rem",
+          }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem", marginBottom: "0.8rem" }}>
+              <div>
+                <label style={labelStyle}>Nombre *</label>
+                <input
+                  type="text"
+                  value={newItem.name}
+                  onChange={e => setNewItem({ ...newItem, name: e.target.value })}
+                  placeholder="Espada larga..."
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Tipo</label>
+                <select value={newItem.type} onChange={e => setNewItem({ ...newItem, type: e.target.value })} style={inputStyle}>
+                  <option value="">— Seleccionar —</option>
+                  {ITEM_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={labelStyle}>Daño</label>
+                <input type="text" value={newItem.damage} onChange={e => setNewItem({ ...newItem, damage: e.target.value })} placeholder="1d8+2..." style={inputStyle} />
+              </div>
+              <div>
+                <label style={labelStyle}>Peso (kg)</label>
+                <input type="number" step="0.1" value={newItem.weight} onChange={e => setNewItem({ ...newItem, weight: e.target.value })} placeholder="2.5" style={inputStyle} />
+              </div>
+              <div style={{ gridColumn: "1 / -1" }}>
+                <label style={labelStyle}>Descripción</label>
+                <textarea
+                  value={newItem.description}
+                  onChange={e => setNewItem({ ...newItem, description: e.target.value })}
+                  rows={2}
+                  placeholder="Notas especiales..."
+                  style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
+                />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <input
+                  type="checkbox"
+                  id="equipped"
+                  checked={newItem.equipped}
+                  onChange={e => setNewItem({ ...newItem, equipped: e.target.checked })}
+                  style={{ width: 18, height: 18, cursor: "pointer" }}
+                />
+                <label htmlFor="equipped" style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.75rem", cursor: "pointer", color: "var(--parchment)" }}>
+                  EQUIPADO
+                </label>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "0.6rem" }}>
+              <button
+                onClick={() => { setShowAddItemForm(false); setNewItem({ name: "", type: "", damage: "", weight: "", description: "", equipped: false }); setItemError(""); }}
+                style={{
+                  flex: 1, padding: "0.6rem",
+                  background: "transparent", border: "1px solid rgba(201,168,76,0.2)",
+                  color: "var(--parchment-deeper)",
+                  fontFamily: "var(--font-cinzel), serif", fontSize: "0.7rem",
+                  cursor: "pointer", textTransform: "uppercase",
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleAddItem}
+                disabled={savingItem}
+                style={{
+                  flex: 1, padding: "0.6rem",
+                  background: savingItem ? "var(--gold-dark)" : "var(--gold)",
+                  border: "none", color: "var(--ink)",
+                  fontFamily: "var(--font-cinzel), serif", fontSize: "0.7rem",
+                  cursor: savingItem ? "not-allowed" : "pointer", textTransform: "uppercase",
+                }}
+              >
+                {savingItem ? "Añadiendo..." : "Añadir Item"}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowAddItemForm(true)}
+            style={{
+              width: "100%", padding: "0.7rem",
+              background: "rgba(201,168,76,0.1)", border: "1px dashed rgba(201,168,76,0.3)",
+              color: "var(--gold)", fontFamily: "var(--font-cinzel), serif",
+              fontSize: "0.75rem", letterSpacing: "0.1em",
+              cursor: "pointer", textTransform: "uppercase",
+            }}
+          >
+            + Añadir Item
+          </button>
+        )}
 
         {/* — Historia — */}
         <p style={sectionTitle}>Historia</p>
