@@ -4,6 +4,7 @@ import { useState, useEffect, use } from "react";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { canGenerateBackstory, generateBackstoryWithGroq, getCurrentUsage } from "@/lib/groq";
 
 type AbilityKey = "strength" | "dexterity" | "constitution" | "intelligence" | "wisdom" | "charisma";
 
@@ -94,6 +95,12 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
   const [savingItem, setSavingItem] = useState(false);
   const [itemError, setItemError] = useState("");
 
+  // Groq AI state
+  const [generatingBackstory, setGeneratingBackstory] = useState(false);
+  const [backstoryError, setBackstoryError] = useState("");
+  const [groqUsage, setGroqUsage] = useState<any>(null);
+  const [canGenerate, setCanGenerate] = useState(false);
+
   // New item form state
   const [newItem, setNewItem] = useState({
     name: "",
@@ -153,6 +160,15 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
         setError("No se pudo cargar el personaje.");
       } finally {
         setLoading(false);
+      }
+
+      // Check Groq availability
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const canGen = await canGenerateBackstory(user.id);
+        setCanGenerate(canGen.allowed);
+        const usage = await getCurrentUsage(user.id);
+        setGroqUsage(usage);
       }
     };
     fetchData();
@@ -343,6 +359,56 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
 
   const setDraftField = (field: keyof Character, value: unknown) => {
     setDraft(prev => prev ? { ...prev, [field]: value } : prev);
+  };
+
+  const handleGenerateBackstory = async () => {
+    if (!char) return;
+
+    setGeneratingBackstory(true);
+    setBackstoryError("");
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setBackstoryError("Debes estar autenticado.");
+        setGeneratingBackstory(false);
+        return;
+      }
+
+      const result = await generateBackstoryWithGroq(
+        user.id,
+        char.name,
+        char.class,
+        char.race,
+        char.level
+      );
+
+      if (result.backstory) {
+        setDraftField("background", result.backstory);
+        // Update local char as well for immediate display
+        setChar(prev => prev ? { ...prev, background: result.backstory } : prev);
+        // Refresh usage stats
+        const usage = await getCurrentUsage(user.id);
+        setGroqUsage(usage);
+
+        // Auto-save the backstory
+        const { error: err } = await supabase
+          .from("characters")
+          .update({ background: result.backstory })
+          .eq("id", id)
+          .eq("user_id", user.id);
+
+        if (err) {
+          console.error("Error saving backstory:", err);
+          setBackstoryError("Trasfondo generado pero no se pudo guardar.");
+        }
+      }
+    } catch (err: any) {
+      console.error("Error generating backstory:", err);
+      setBackstoryError(err.message || "Error al generar trasfondo. Intenta de nuevo.");
+    } finally {
+      setGeneratingBackstory(false);
+    }
   };
 
   if (loading) return (
@@ -859,6 +925,60 @@ export default function CharacterPage({ params }: { params: Promise<{ id: string
 
         {/* — Historia — */}
         <p style={sectionTitle}>Historia</p>
+
+        {backstoryError && (
+          <p style={{
+            fontSize: "0.85rem", color: "var(--blood-light)",
+            marginBottom: "1rem", fontStyle: "italic",
+          }}>
+            {backstoryError}
+          </p>
+        )}
+
+        {!editing && !generatingBackstory && canGenerate && (
+          <div style={{ marginBottom: "1.2rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+            <button
+              onClick={handleGenerateBackstory}
+              disabled={generatingBackstory}
+              style={{
+                fontFamily: "var(--font-cinzel), serif",
+                fontSize: "0.72rem", letterSpacing: "0.1em",
+                textTransform: "uppercase", color: "var(--ink)",
+                background: "var(--gold)", border: "none",
+                padding: "0.7rem 1.4rem", cursor: "pointer",
+              }}
+            >
+              ✨ Generar Trasfondo
+            </button>
+            {groqUsage && (
+              <p style={{
+                fontFamily: "var(--font-cinzel), serif",
+                fontSize: "0.65rem", color: "var(--text-muted)",
+                letterSpacing: "0.05em",
+              }}>
+                {groqUsage.requestsRemaining ?? 30} trasfondos disponibles
+              </p>
+            )}
+          </div>
+        )}
+
+        {generatingBackstory && (
+          <p style={{
+            fontSize: "0.85rem", color: "var(--gold)",
+            marginBottom: "1rem", fontStyle: "italic",
+          }}>
+            Generando trasfondo mágico...
+          </p>
+        )}
+
+        {!canGenerate && !editing && (
+          <p style={{
+            fontSize: "0.85rem", color: "var(--text-muted)",
+            marginBottom: "1rem", fontStyle: "italic",
+          }}>
+            Has alcanzado el límite de trasfondos para este mes.
+          </p>
+        )}
 
         {editing ? (
           <div>
