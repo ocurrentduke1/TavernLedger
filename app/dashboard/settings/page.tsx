@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { useTheme } from "next-themes";
 
 type UserProfile = {
   email: string;
@@ -20,7 +22,8 @@ export default function SettingsPage() {
   const [success, setSuccess] = useState("");
 
   // Form states
-  const [activeTab, setActiveTab] = useState<"profile" | "email" | "password">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "appearance" | "email" | "password">("profile");
+  const { theme } = useTheme();
   const [saving, setSaving] = useState(false);
 
   // Profile tab
@@ -273,36 +276,19 @@ export default function SettingsPage() {
 
       {/* Tabs */}
       <div style={{ display: "flex", gap: "0", marginBottom: "2rem", borderBottom: "1px solid rgba(201,168,76,0.1)" }}>
-        <button
-          onClick={() => setActiveTab("profile")}
-          style={{
-            ...tabStyle(activeTab === "profile"),
-            border: "none",
-            borderBottom: activeTab === "profile" ? "3px solid var(--gold)" : "1px solid rgba(201,168,76,0.1)",
-          }}
-        >
-          Perfil
-        </button>
-        <button
-          onClick={() => setActiveTab("email")}
-          style={{
-            ...tabStyle(activeTab === "email"),
-            border: "none",
-            borderBottom: activeTab === "email" ? "3px solid var(--gold)" : "1px solid rgba(201,168,76,0.1)",
-          }}
-        >
-          Email
-        </button>
-        <button
-          onClick={() => setActiveTab("password")}
-          style={{
-            ...tabStyle(activeTab === "password"),
-            border: "none",
-            borderBottom: activeTab === "password" ? "3px solid var(--gold)" : "1px solid rgba(201,168,76,0.1)",
-          }}
-        >
-          Contraseña
-        </button>
+        {(["profile", "appearance", "email", "password"] as const).map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            style={{
+              ...tabStyle(activeTab === tab),
+              border: "none",
+              borderBottom: activeTab === tab ? "3px solid var(--gold)" : "1px solid rgba(201,168,76,0.1)",
+            }}
+          >
+            {{ profile: "Perfil", appearance: "Apariencia", email: "Email", password: "Contraseña" }[tab]}
+          </button>
+        ))}
       </div>
 
       {/* Content */}
@@ -311,6 +297,26 @@ export default function SettingsPage() {
         border: "1px solid rgba(201,168,76,0.12)",
         padding: "2rem",
       }}>
+
+        {/* Appearance Tab */}
+        {activeTab === "appearance" && (
+          <div>
+            <p style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: "1.5rem" }}>
+              Modo de visualización
+            </p>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.2rem 1.4rem", background: "rgba(26,20,16,0.4)", border: "1px solid rgba(201,168,76,0.15)" }}>
+              <div>
+                <p style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.8rem", letterSpacing: "0.08em", color: "var(--parchment)", marginBottom: "0.3rem" }}>
+                  {theme === "dark" ? "Modo Oscuro" : "Modo Claro"}
+                </p>
+                <p style={{ fontFamily: "var(--font-crimson), serif", fontSize: "0.9rem", color: "var(--text-muted)", fontStyle: "italic" }}>
+                  {theme === "dark" ? "Noche de taberna — ideal para sesiones largas." : "Luz del día — más legible en entornos iluminados."}
+                </p>
+              </div>
+              <ThemeToggle />
+            </div>
+          </div>
+        )}
 
         {/* Profile Tab */}
         {activeTab === "profile" && (

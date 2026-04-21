@@ -74,9 +74,11 @@ const navItems = [
     href: "/dashboard/bestiary",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M12 2a10 10 0 1 0 10 10"/>
-        <path d="M12 8v4l3 3"/>
-        <path d="M18 2l4 4-4 4"/>
+        <path d="M12 3a7 7 0 0 0-7 7c0 2.8 1.6 5.2 4 6.5V19h6v-2.5c2.4-1.3 4-3.7 4-6.5a7 7 0 0 0-7-7z"/>
+        <line x1="9" y1="19" x2="15" y2="19"/>
+        <line x1="9" y1="21" x2="15" y2="21"/>
+        <circle cx="9.5" cy="11" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="14.5" cy="11" r="1" fill="currentColor" stroke="none"/>
       </svg>
     ),
   },

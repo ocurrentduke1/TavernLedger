@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase";
 import { useEffect, useState } from "react";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function DashboardHeader({ title, subtitle }: {
   title: string;
@@ -28,9 +27,6 @@ export default function DashboardHeader({ title, subtitle }: {
           {title}
         </h1>
       </div>
-
-      {/* Centro: Toggle de Tema */}
-      <ThemeToggle />
 
       {/* Derecha: Usuario */}
       <div className="flex items-center gap-3">
