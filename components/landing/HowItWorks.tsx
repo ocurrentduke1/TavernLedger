@@ -23,83 +23,68 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how" style={{
-      padding: "8rem 4rem",
-      background: "var(--stone)",
-      position: "relative",
-    }}>
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: 4,
-        background: "linear-gradient(to right, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent)",
-      }} />
+    <section id="how" className="relative bg-surface px-[clamp(1.2rem,5vw,4rem)] py-[clamp(4rem,8vw,8rem)]">
+      {/* Línea superior */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[3px]"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, var(--raw-gold-dim), var(--raw-gold), var(--raw-gold-dim), transparent)",
+        }}
+      />
 
-      <p style={{
-        fontFamily: "var(--font-cinzel), serif",
-        fontSize: "0.7rem", letterSpacing: "0.4em",
-        textTransform: "uppercase", color: "var(--gold)",
-        textAlign: "center", marginBottom: "1rem",
-      }}>
+      <p className="font-cinzel text-[0.7rem] tracking-[0.4em] uppercase text-gold text-center mb-4">
         El Camino del Héroe
       </p>
-
-      <h2 style={{
-        fontFamily: "'Cinzel Decorative', serif",
-        fontSize: "clamp(1.8rem, 4vw, 3rem)",
-        textAlign: "center", color: "var(--parchment)",
-        marginBottom: "1rem", lineHeight: 1.2,
-      }}>
+      <h2 className="font-cinzel-dec text-[clamp(1.8rem,4vw,3rem)] text-center text-prose mb-4 leading-[1.2]">
         Cómo funciona
       </h2>
-
-      <p style={{
-        textAlign: "center", fontSize: "1.15rem",
-        fontStyle: "italic", color: "var(--parchment-deeper)",
-        maxWidth: 500, margin: "0 auto 5rem", lineHeight: 1.7,
-      }}>
+      <p className="text-center text-[1.1rem] italic text-prose-muted max-w-[480px] mx-auto mb-[clamp(3rem,6vw,6rem)] leading-[1.7]">
         En cuatro pasos, tu grupo estará listo para la aventura.
       </p>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-        gap: 0, maxWidth: 1000, margin: "0 auto",
-        position: "relative",
-      }}>
-        {/* Línea conectora */}
-        <div style={{
-          position: "absolute",
-          top: 36, left: "12%", right: "12%", height: 1,
-          background: "linear-gradient(to right, transparent, var(--gold-dark), var(--gold-dark), transparent)",
-        }} />
+      <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-[1000px] mx-auto">
+        {/* Línea conectora — solo desktop */}
+        <div
+          className="hidden lg:block absolute h-px"
+          style={{
+            top: 36,
+            left: "12%",
+            right: "12%",
+            background:
+              "linear-gradient(to right, transparent, var(--raw-gold-dim), var(--raw-gold-dim), transparent)",
+          }}
+        />
 
-        {steps.map((s) => (
-          <div key={s.num} style={{
-            padding: "0 2rem", textAlign: "center",
-            position: "relative",
-          }}>
-            <div style={{
-              width: 72, height: 72, borderRadius: "50%",
-              background: "var(--ink)",
-              border: "2px solid var(--gold-dark)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 1.5rem",
-              fontFamily: "'Cinzel Decorative', serif",
-              fontSize: "1.4rem", color: "var(--gold)",
-              position: "relative", zIndex: 1,
-            }}>
+        {steps.map((s, i) => (
+          <div key={s.num} className="flex flex-col items-center text-center relative px-4">
+            {/* Número */}
+            <div
+              className="relative z-10 w-18 h-18 rounded-full border-2 border-gold-dim bg-canvas flex items-center justify-center font-cinzel-dec text-[1.4rem] text-gold mb-6 shadow-md"
+              style={{ width: 72, height: 72 }}
+            >
               {s.num}
+              {/* Glow sutil en hover */}
+              <div className="absolute inset-0 rounded-full bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <h3 style={{
-              fontFamily: "var(--font-cinzel), serif",
-              fontSize: "0.9rem", letterSpacing: "0.05em",
-              color: "var(--gold-light)", marginBottom: "0.6rem",
-            }}>
+
+            {/* Conector vertical móvil */}
+            {i < steps.length - 1 && (
+              <div
+                className="lg:hidden absolute left-1/2 -translate-x-1/2 w-px"
+                style={{
+                  top: 72,
+                  height: 32,
+                  background:
+                    "linear-gradient(to bottom, var(--raw-gold-dim), transparent)",
+                }}
+              />
+            )}
+
+            <h3 className="font-cinzel text-[0.9rem] tracking-[0.05em] text-gold-subtle mb-2">
               {s.title}
             </h3>
-            <p style={{
-              fontSize: "0.95rem", fontStyle: "italic",
-              color: "var(--parchment-deeper)", lineHeight: 1.6,
-            }}>
+            <p className="text-[0.95rem] italic text-prose-muted leading-[1.6]">
               {s.desc}
             </p>
           </div>

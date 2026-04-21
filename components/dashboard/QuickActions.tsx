@@ -11,38 +11,15 @@ const actions = [
 
 export default function QuickActions() {
   return (
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-      gap: "1rem",
-    }}>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {actions.map((action) => (
         <Link
           key={action.href}
           href={action.href}
-          style={{
-            display: "flex", alignItems: "center", gap: "0.8rem",
-            padding: "1.2rem 1.5rem",
-            background: "rgba(58,50,40,0.4)",
-            border: "1px solid rgba(201,168,76,0.12)",
-            textDecoration: "none",
-            transition: "background 0.2s, border-color 0.2s",
-          }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(58,50,40,0.8)";
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(201,168,76,0.3)";
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(58,50,40,0.4)";
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(201,168,76,0.12)";
-          }}
+          className="flex items-center gap-3 px-6 py-5 bg-surface/50 border border-gold/10 no-underline hover:bg-surface hover:border-gold/30 hover:-translate-y-0.5 transition-all duration-300"
         >
-          <span style={{ fontSize: "1.2rem" }}>{action.icon}</span>
-          <span style={{
-            fontFamily: "var(--font-cinzel), serif",
-            fontSize: "0.78rem", letterSpacing: "0.05em",
-            color: "var(--gold-light)",
-          }}>
+          <span className="text-[1.2rem]">{action.icon}</span>
+          <span className="font-cinzel text-[0.78rem] tracking-[0.05em] text-gold-subtle">
             {action.label}
           </span>
         </Link>

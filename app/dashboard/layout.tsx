@@ -7,13 +7,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "var(--ink)" }}>
+    <div className="flex min-h-screen bg-canvas">
       <Sidebar />
-      <main style={{
-        flex: 1, marginLeft: 240,
-        minHeight: "100vh",
-        display: "flex", flexDirection: "column",
-      }}>
+      <main className="flex-1 ml-60 min-h-screen flex flex-col">
         <DashboardHeader title="Panel del Aventurero" />
         {children}
       </main>

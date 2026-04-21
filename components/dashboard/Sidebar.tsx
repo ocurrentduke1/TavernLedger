@@ -94,53 +94,32 @@ export default function Sidebar() {
   };
 
   return (
-    <aside style={{
-      width: 240, minHeight: "100vh",
-      background: "rgba(26,20,16,0.95)",
-      borderRight: "1px solid rgba(201,168,76,0.12)",
-      display: "flex", flexDirection: "column",
-      position: "fixed", top: 0, left: 0, bottom: 0,
-      zIndex: 50,
-    }}>
+    <aside className="w-60 min-h-screen bg-canvas/95 border-r border-gold/10 flex flex-col fixed top-0 left-0 bottom-0 z-50">
       {/* Logo */}
-      <div style={{
-        padding: "1.8rem 1.5rem",
-        borderBottom: "1px solid rgba(201,168,76,0.1)",
-      }}>
-        <Link href="/" style={{
-          fontFamily: "'Cinzel Decorative', serif",
-          fontSize: "1.1rem", color: "var(--gold)",
-          textDecoration: "none", display: "block",
-        }}>
-          Tavern<span style={{ color: "var(--parchment)" }}>Ledger</span>
+      <div className="px-6 py-[1.8rem] border-b border-gold/10">
+        <Link href="/" className="font-cinzel-dec text-[1.1rem] text-gold no-underline block">
+          Tavern<span className="text-prose">Ledger</span>
         </Link>
-        <p style={{
-          fontFamily: "var(--font-cinzel), serif",
-          fontSize: "0.6rem", letterSpacing: "0.2em",
-          color: "var(--text-muted)", textTransform: "uppercase",
-          marginTop: "0.3rem",
-        }}>
+        <p className="font-cinzel text-[0.6rem] tracking-[0.2em] text-prose-muted uppercase mt-1">
           Panel del Aventurero
         </p>
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1, padding: "1.5rem 0", overflowY: "auto" }}>
+      <nav className="flex-1 py-6 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <Link key={item.href} href={item.href} style={{
-              display: "flex", alignItems: "center", gap: "0.8rem",
-              padding: "0.75rem 1.5rem",
-              color: isActive ? "var(--gold)" : "var(--parchment-deeper)",
-              textDecoration: "none",
-              background: isActive ? "rgba(201,168,76,0.08)" : "transparent",
-              borderLeft: isActive ? "2px solid var(--gold)" : "2px solid transparent",
-              fontFamily: "var(--font-cinzel), serif",
-              fontSize: "0.75rem", letterSpacing: "0.08em",
-              transition: "all 0.2s",
-            }}>
-              <span style={{ opacity: isActive ? 1 : 0.6 }}>{item.icon}</span>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-6 py-3 no-underline border-l-2 transition-all duration-200 font-cinzel text-[0.75rem] tracking-[0.08em] ${
+                isActive
+                  ? "text-gold bg-gold/8 border-gold"
+                  : "text-prose-soft border-transparent opacity-60 hover:opacity-100"
+              }`}
+            >
+              <span>{item.icon}</span>
               {item.label}
             </Link>
           );
@@ -148,19 +127,8 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div style={{
-        padding: "1.5rem",
-        borderTop: "1px solid rgba(201,168,76,0.1)",
-      }}>
-        <Link href="/dashboard/settings" style={{
-          display: "flex", alignItems: "center", gap: "0.8rem",
-          padding: "0.75rem",
-          color: "var(--parchment-deeper)",
-          textDecoration: "none",
-          fontFamily: "var(--font-cinzel), serif",
-          fontSize: "0.75rem", letterSpacing: "0.08em",
-          marginBottom: "0.5rem",
-        }}>
+      <div className="px-6 py-6 border-t border-gold/10">
+        <Link href="/dashboard/settings" className="flex items-center gap-3 px-3 py-3 text-prose-soft no-underline font-cinzel text-[0.75rem] tracking-[0.08em] mb-2 hover:text-gold transition-colors">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <circle cx="12" cy="12" r="3"/>
             <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
@@ -168,15 +136,10 @@ export default function Sidebar() {
           Configuración
         </Link>
 
-        <button onClick={handleLogout} style={{
-          display: "flex", alignItems: "center", gap: "0.8rem",
-          padding: "0.75rem", width: "100%",
-          color: "var(--blood-light)",
-          background: "transparent", border: "none",
-          fontFamily: "var(--font-cinzel), serif",
-          fontSize: "0.75rem", letterSpacing: "0.08em",
-          cursor: "pointer", textAlign: "left",
-        }}>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-3 py-3 w-full text-blood-ui bg-transparent border-none font-cinzel text-[0.75rem] tracking-[0.08em] cursor-pointer text-left hover:text-blood-ui/80 transition-colors"
+        >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
             <polyline points="16 17 21 12 16 7"/>

@@ -35,115 +35,59 @@ export default async function DashboardPage() {
     .limit(4);
 
   return (
-    <div style={{ padding: "3rem" }}>
+    <div className="p-12">
 
       {/* Header */}
-      <div style={{ marginBottom: "3rem" }}>
-        <p style={{
-          fontFamily: "var(--font-cinzel), serif",
-          fontSize: "0.7rem", letterSpacing: "0.3em",
-          textTransform: "uppercase", color: "var(--gold)",
-          marginBottom: "0.5rem",
-        }}>
+      <div className="mb-12">
+        <p className="font-cinzel text-[0.7rem] tracking-[0.3em] uppercase text-gold mb-2">
           Bienvenido de vuelta
         </p>
-        <h1 style={{
-          fontFamily: "'Cinzel Decorative', serif",
-          fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
-          color: "var(--parchment)", lineHeight: 1.2,
-        }}>
+        <h1 className="font-cinzel-dec text-[clamp(1.5rem,3vw,2.5rem)] text-prose leading-[1.2]">
           Panel del Aventurero
         </h1>
       </div>
 
       {/* Accesos rápidos */}
-      <div style={{ marginBottom: "3rem" }}>
-        <p style={{
-          fontFamily: "var(--font-cinzel), serif",
-          fontSize: "0.7rem", letterSpacing: "0.3em",
-          textTransform: "uppercase", color: "var(--text-muted)",
-          marginBottom: "1.2rem",
-        }}>
+      <div className="mb-12">
+        <p className="font-cinzel text-[0.7rem] tracking-[0.3em] uppercase text-prose-muted mb-5">
           Acciones Rápidas
         </p>
         <QuickActions />
       </div>
 
       {/* Grid principal */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "2rem",
-      }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         {/* Campañas activas */}
         <div>
-          <div style={{
-            display: "flex", alignItems: "center",
-            justifyContent: "space-between", marginBottom: "1.2rem",
-          }}>
-            <p style={{
-              fontFamily: "var(--font-cinzel), serif",
-              fontSize: "0.7rem", letterSpacing: "0.3em",
-              textTransform: "uppercase", color: "var(--text-muted)",
-            }}>
+          <div className="flex items-center justify-between mb-5">
+            <p className="font-cinzel text-[0.7rem] tracking-[0.3em] uppercase text-prose-muted">
               Campañas Activas
             </p>
-            <Link href="/dashboard/campaigns" style={{
-              fontFamily: "var(--font-cinzel), serif",
-              fontSize: "0.65rem", letterSpacing: "0.1em",
-              color: "var(--gold)", textDecoration: "none",
-              textTransform: "uppercase",
-            }}>
+            <Link href="/dashboard/campaigns" className="font-cinzel text-[0.65rem] tracking-[0.1em] text-gold no-underline uppercase hover:text-gold-subtle transition-colors">
               Ver todas →
             </Link>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+          <div className="flex flex-col gap-3">
             {campaigns && campaigns.length > 0 ? (
               campaigns.map((campaign) => (
-                <Link key={campaign.id} href={`/dashboard/campaigns/${campaign.id}`} style={{
-                  display: "block", padding: "1.2rem 1.5rem",
-                  background: "rgba(58,50,40,0.4)",
-                  border: "1px solid rgba(201,168,76,0.12)",
-                  textDecoration: "none",
-                  transition: "border-color 0.2s",
-                }}>
-                  <div style={{
-                    fontFamily: "var(--font-cinzel), serif",
-                    fontSize: "0.85rem", color: "var(--gold-light)",
-                    marginBottom: "0.3rem",
-                  }}>
+                <Link key={campaign.id} href={`/dashboard/campaigns/${campaign.id}`} className="block p-5 bg-surface/50 border border-gold/10 no-underline hover:border-gold/30 hover:-translate-y-0.5 transition-all duration-300">
+                  <div className="font-cinzel text-[0.85rem] text-gold-subtle mb-2">
                     {campaign.name}
                   </div>
-                  <div style={{
-                    fontSize: "0.8rem", fontStyle: "italic",
-                    color: "var(--text-muted)",
-                  }}>
+                  <div className="text-[0.8rem] italic text-prose-muted">
                     {campaign.current_players}/{campaign.max_players} jugadores
                     · {campaign.is_public ? "Pública" : "Privada"}
                   </div>
                 </Link>
               ))
             ) : (
-              <div style={{
-                padding: "2rem", textAlign: "center",
-                background: "rgba(58,50,40,0.2)",
-                border: "1px dashed rgba(201,168,76,0.12)",
-              }}>
-                <p style={{
-                  fontSize: "0.9rem", fontStyle: "italic",
-                  color: "var(--text-muted)", marginBottom: "1rem",
-                }}>
+              <div className="p-8 text-center bg-surface/30 border border-dashed border-gold/15">
+                <p className="text-[0.9rem] italic text-prose-muted mb-4">
                   Aún no tienes campañas activas
                 </p>
-                <Link href="/dashboard/campaigns/new" style={{
-                  fontFamily: "var(--font-cinzel), serif",
-                  fontSize: "0.75rem", letterSpacing: "0.1em",
-                  textTransform: "uppercase", color: "var(--ink)",
-                  background: "var(--gold)", padding: "0.6rem 1.2rem",
-                  textDecoration: "none", display: "inline-block",
-                }}>
+                <Link href="/dashboard/campaigns/new" className="font-cinzel text-[0.75rem] tracking-[0.1em] uppercase text-canvas bg-gold px-5 py-2 no-underline inline-block hover:bg-gold-subtle transition-colors">
                   Crear Campaña
                 </Link>
               </div>
@@ -153,93 +97,43 @@ export default async function DashboardPage() {
 
         {/* Mis personajes */}
         <div>
-          <div style={{
-            display: "flex", alignItems: "center",
-            justifyContent: "space-between", marginBottom: "1.2rem",
-          }}>
-            <p style={{
-              fontFamily: "var(--font-cinzel), serif",
-              fontSize: "0.7rem", letterSpacing: "0.3em",
-              textTransform: "uppercase", color: "var(--text-muted)",
-            }}>
+          <div className="flex items-center justify-between mb-5">
+            <p className="font-cinzel text-[0.7rem] tracking-[0.3em] uppercase text-prose-muted">
               Mis Personajes
             </p>
-            <Link href="/dashboard/characters" style={{
-              fontFamily: "var(--font-cinzel), serif",
-              fontSize: "0.65rem", letterSpacing: "0.1em",
-              color: "var(--gold)", textDecoration: "none",
-              textTransform: "uppercase",
-            }}>
+            <Link href="/dashboard/characters" className="font-cinzel text-[0.65rem] tracking-[0.1em] text-gold no-underline uppercase hover:text-gold-subtle transition-colors">
               Ver todos →
             </Link>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+          <div className="flex flex-col gap-3">
             {characters && characters.length > 0 ? (
               characters.map((char) => (
-                <Link key={char.id} href={`/dashboard/characters/${char.id}`} style={{
-                  display: "flex", alignItems: "center", gap: "1rem",
-                  padding: "1.2rem 1.5rem",
-                  background: "rgba(58,50,40,0.4)",
-                  border: "1px solid rgba(201,168,76,0.12)",
-                  textDecoration: "none",
-                  transition: "border-color 0.2s",
-                }}>
-                  <div style={{
-                    width: 40, height: 40, borderRadius: "50%",
-                    background: "var(--stone)",
-                    border: "1px solid var(--gold-dark)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "'Cinzel Decorative', serif",
-                    fontSize: "1rem", color: "var(--gold)",
-                    flexShrink: 0,
-                  }}>
+                <Link key={char.id} href={`/dashboard/characters/${char.id}`} className="flex items-center gap-4 p-5 bg-surface/50 border border-gold/10 no-underline hover:border-gold/30 hover:-translate-y-0.5 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-full bg-surface border border-gold-dim flex items-center justify-center font-cinzel-dec text-base text-gold flex-shrink-0">
                     ⚔
                   </div>
-                  <div>
-                    <div style={{
-                      fontFamily: "var(--font-cinzel), serif",
-                      fontSize: "0.85rem", color: "var(--gold-light)",
-                      marginBottom: "0.2rem",
-                    }}>
+                  <div className="flex-1">
+                    <div className="font-cinzel text-[0.85rem] text-gold-subtle mb-1">
                       {char.name}
                     </div>
-                    <div style={{
-                      fontSize: "0.78rem", fontStyle: "italic",
-                      color: "var(--text-muted)",
-                    }}>
+                    <div className="text-[0.78rem] italic text-prose-muted">
                       {char.race} · {char.class} · Nv. {char.level}
                     </div>
                   </div>
-                  <div style={{ marginLeft: "auto", textAlign: "right" }}>
-                    <div style={{
-                      fontFamily: "var(--font-cinzel), serif",
-                      fontSize: "0.75rem", color: "var(--blood-light)",
-                    }}>
+                  <div className="text-right flex-shrink-0">
+                    <div className="font-cinzel text-[0.75rem] text-blood-ui">
                       {char.hp_current}/{char.hp_max} HP
                     </div>
                   </div>
                 </Link>
               ))
             ) : (
-              <div style={{
-                padding: "2rem", textAlign: "center",
-                background: "rgba(58,50,40,0.2)",
-                border: "1px dashed rgba(201,168,76,0.12)",
-              }}>
-                <p style={{
-                  fontSize: "0.9rem", fontStyle: "italic",
-                  color: "var(--text-muted)", marginBottom: "1rem",
-                }}>
+              <div className="p-8 text-center bg-surface/30 border border-dashed border-gold/15">
+                <p className="text-[0.9rem] italic text-prose-muted mb-4">
                   Aún no tienes personajes
                 </p>
-                <Link href="/dashboard/characters/new" style={{
-                  fontFamily: "var(--font-cinzel), serif",
-                  fontSize: "0.75rem", letterSpacing: "0.1em",
-                  textTransform: "uppercase", color: "var(--ink)",
-                  background: "var(--gold)", padding: "0.6rem 1.2rem",
-                  textDecoration: "none", display: "inline-block",
-                }}>
+                <Link href="/dashboard/characters/new" className="font-cinzel text-[0.75rem] tracking-[0.1em] uppercase text-canvas bg-gold px-5 py-2 no-underline inline-block hover:bg-gold-subtle transition-colors">
                   Crear Personaje
                 </Link>
               </div>

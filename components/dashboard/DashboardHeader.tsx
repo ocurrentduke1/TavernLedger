@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase";
 import { useEffect, useState } from "react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function DashboardHeader({ title, subtitle }: {
   title: string;
@@ -17,60 +18,31 @@ export default function DashboardHeader({ title, subtitle }: {
   }, []);
 
   return (
-    <header style={{
-      padding: "1.5rem 3rem",
-      borderBottom: "1px solid rgba(201,168,76,0.1)",
-      background: "rgba(26,20,16,0.6)",
-      display: "flex", alignItems: "center",
-      justifyContent: "space-between",
-    }}>
+    <header className="px-12 py-6 border-b border-gold/10 bg-canvas/60 flex items-center justify-between">
       {/* Título de la página */}
       <div>
-        <p style={{
-          fontFamily: "var(--font-cinzel), serif",
-          fontSize: "0.65rem", letterSpacing: "0.3em",
-          textTransform: "uppercase", color: "var(--gold)",
-          marginBottom: "0.3rem",
-        }}>
+        <p className="font-cinzel text-[0.65rem] tracking-[0.3em] uppercase text-gold mb-1">
           {subtitle ?? "TavernLedger"}
         </p>
-        <h1 style={{
-          fontFamily: "'Cinzel Decorative', serif",
-          fontSize: "1.4rem", color: "var(--parchment)",
-          lineHeight: 1.2,
-        }}>
+        <h1 className="font-cinzel-dec text-[1.4rem] text-prose leading-[1.2]">
           {title}
         </h1>
       </div>
 
-      {/* Usuario */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: "0.8rem",
-      }}>
-        <div style={{ textAlign: "right" }}>
-          <p style={{
-            fontFamily: "var(--font-cinzel), serif",
-            fontSize: "0.65rem", letterSpacing: "0.1em",
-            textTransform: "uppercase", color: "var(--text-muted)",
-          }}>
+      {/* Centro: Toggle de Tema */}
+      <ThemeToggle />
+
+      {/* Derecha: Usuario */}
+      <div className="flex items-center gap-3">
+        <div className="text-right">
+          <p className="font-cinzel text-[0.65rem] tracking-[0.1em] uppercase text-prose-muted">
             Aventurero
           </p>
-          <p style={{
-            fontSize: "0.85rem", fontStyle: "italic",
-            color: "var(--parchment-deeper)",
-          }}>
+          <p className="text-[0.85rem] italic text-prose-soft">
             {email}
           </p>
         </div>
-        <div style={{
-          width: 40, height: 40, borderRadius: "50%",
-          background: "var(--stone)",
-          border: "1px solid var(--gold-dark)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontFamily: "'Cinzel Decorative', serif",
-          fontSize: "1rem", color: "var(--gold)",
-          flexShrink: 0,
-        }}>
+        <div className="w-10 h-10 rounded-full bg-surface border border-gold-dim flex items-center justify-center font-cinzel-dec text-base text-gold flex-shrink-0">
           {email.charAt(0).toUpperCase()}
         </div>
       </div>

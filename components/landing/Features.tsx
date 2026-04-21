@@ -1,164 +1,162 @@
-"use client"
+"use client";
 
 const features = [
   {
+    id: "fichas",
     title: "Fichas de Personaje",
     desc: "Crea y gestiona fichas completas con stats, habilidades, trasfondo, equipo e inventario. Todo sincronizado en tiempo real.",
+    variant: "large",
     icon: (
-      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" width={56} height={56}>
-        <rect x="8" y="6" width="32" height="44" rx="2" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-        <path d="M16 6V50" stroke="#8A6A1E" strokeWidth="1"/>
-        <line x1="20" y1="16" x2="34" y2="16" stroke="#C9A84C" strokeWidth="1.5"/>
-        <line x1="20" y1="22" x2="34" y2="22" stroke="#8A6A1E" strokeWidth="1"/>
-        <line x1="20" y1="28" x2="30" y2="28" stroke="#8A6A1E" strokeWidth="1"/>
-        <circle cx="40" cy="40" r="10" fill="#1A1410" stroke="#C9A84C" strokeWidth="1.5"/>
-        <path d="M36 40L39 43L44 37" stroke="#C9A84C" strokeWidth="1.5" strokeLinecap="round"/>
+      <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" width={72} height={72}>
+        <rect x="10" y="8" width="40" height="56" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.8"/>
+        <path d="M20 8V64" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+        <line x1="26" y1="20" x2="44" y2="20" stroke="currentColor" strokeWidth="1.5"/>
+        <line x1="26" y1="28" x2="44" y2="28" stroke="currentColor" strokeWidth="1" opacity="0.5"/>
+        <line x1="26" y1="36" x2="40" y2="36" stroke="currentColor" strokeWidth="1" opacity="0.5"/>
+        <line x1="26" y1="44" x2="38" y2="44" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+        <circle cx="52" cy="52" r="12" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M48 52L51 55L56 49" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
   {
+    id: "dados",
     title: "Simulador de Dados",
-    desc: "Lanza d4, d6, d8, d10, d12 y d20 con animaciones. Historial de tiradas, modificadores y tiradas de ventaja.",
+    desc: "Lanza d4 al d20 con animaciones. Historial, modificadores y ventaja.",
+    variant: "default",
     icon: (
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" width={56} height={56}>
-        <path d="M28 8L44 20V36L28 48L12 36V20L28 8Z" stroke="#C9A84C" strokeWidth="1.5" fill="rgba(201,168,76,0.06)"/>
-        <path d="M28 8L44 20" stroke="#8A6A1E" strokeWidth="1"/>
-        <path d="M28 8L12 20" stroke="#8A6A1E" strokeWidth="1"/>
-        <text x="28" y="32" textAnchor="middle" fontFamily="serif" fontSize="14" fill="#C9A84C" fontWeight="bold">20</text>
+        <path d="M28 8L44 20V36L28 48L12 36V20L28 8Z" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.2"/>
+        <path d="M28 8L44 20M28 8L12 20M12 20V36M44 20V36M12 36L28 48M44 36L28 48" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+        <text x="28" y="33" textAnchor="middle" fontFamily="serif" fontSize="14" fill="currentColor" fontWeight="bold">20</text>
       </svg>
     ),
   },
   {
+    id: "seguimiento",
     title: "Seguimiento en Partida",
-    desc: "HP, condiciones, concentración, recursos y spell slots actualizados en vivo para todo el grupo simultáneamente.",
+    desc: "HP, condiciones, concentración y spell slots en vivo para todo el grupo.",
+    variant: "default",
     icon: (
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" width={56} height={56}>
-        <circle cx="28" cy="28" r="16" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-        <circle cx="28" cy="14" r="3" fill="#C9A84C"/>
-        <circle cx="28" cy="42" r="3" fill="#C9A84C"/>
-        <circle cx="14" cy="28" r="3" fill="#C9A84C"/>
-        <circle cx="42" cy="28" r="3" fill="#C9A84C"/>
-        <path d="M28 14V28L36 36" stroke="#8A6A1E" strokeWidth="1.5" strokeLinecap="round"/>
+        <circle cx="28" cy="28" r="16" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+        <circle cx="28" cy="14" r="2.5" fill="currentColor"/>
+        <circle cx="28" cy="42" r="2.5" fill="currentColor"/>
+        <circle cx="14" cy="28" r="2.5" fill="currentColor"/>
+        <circle cx="42" cy="28" r="2.5" fill="currentColor"/>
+        <path d="M28 14V28L36 36" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
   },
   {
-    title: "Stats de Armas y Armaduras",
-    desc: "Base de datos de equipo con cálculo automático de daño, CA y propiedades especiales. Compatible con todo el SRD 5e.",
+    id: "stats",
+    title: "Stats de Equipo",
+    desc: "Base de datos con cálculo automático de daño, CA y propiedades. Compatible con SRD 5e.",
+    variant: "default",
     icon: (
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" width={56} height={56}>
-        <path d="M10 46L20 20L36 36L42 14L50 46" stroke="#C9A84C" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
-        <circle cx="20" cy="20" r="3" fill="#C9A84C"/>
-        <circle cx="36" cy="36" r="3" fill="#C9A84C"/>
-        <circle cx="42" cy="14" r="3" fill="#C9A84C"/>
-        <line x1="10" y1="46" x2="50" y2="46" stroke="#8A6A1E" strokeWidth="1"/>
+        <path d="M10 46L20 20L36 36L42 14L50 46" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
+        <circle cx="20" cy="20" r="3" fill="currentColor"/>
+        <circle cx="36" cy="36" r="3" fill="currentColor"/>
+        <circle cx="42" cy="14" r="3" fill="currentColor"/>
+        <line x1="10" y1="46" x2="50" y2="46" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
       </svg>
     ),
   },
   {
+    id: "mapas",
     title: "Mapas Interactivos",
-    desc: "Sube mapas de tus mazmorras y ciudades. Coloca tokens de jugadores y enemigos, y comparte la vista en tiempo real.",
+    desc: "Sube mapas, coloca tokens y comparte la vista en tiempo real con tu grupo.",
+    variant: "default",
     icon: (
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" width={56} height={56}>
-        <rect x="8" y="14" width="40" height="28" rx="2" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-        <path d="M8 22H48" stroke="#8A6A1E" strokeWidth="1"/>
-        <circle cx="22" cy="30" r="4" fill="rgba(201,168,76,0.15)" stroke="#C9A84C" strokeWidth="1"/>
-        <circle cx="34" cy="30" r="4" fill="rgba(139,26,26,0.2)" stroke="#8B1A1A" strokeWidth="1"/>
-        <line x1="18" y1="44" x2="38" y2="44" stroke="#C9A84C" strokeWidth="2"/>
+        <rect x="8" y="14" width="40" height="28" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+        <path d="M8 22H48" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+        <circle cx="22" cy="30" r="4" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.6"/>
+        <circle cx="34" cy="30" r="4" fill="none" stroke="#8B1A1A" strokeWidth="1" opacity="0.8"/>
+        <line x1="18" y1="44" x2="38" y2="44" stroke="currentColor" strokeWidth="2"/>
       </svg>
     ),
   },
   {
+    id: "ia",
     title: "IA para Trasfondos",
     desc: "Genera trasfondos únicos, nombres épicos, motivaciones y conexiones entre personajes con inteligencia artificial.",
+    variant: "accent",
     icon: (
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" width={56} height={56}>
-        <path d="M28 10C18 10 10 18 10 28C10 38 18 46 28 46" stroke="#8A6A1E" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-        <path d="M28 10C38 10 46 18 46 28C46 38 38 46 28 46" stroke="#C9A84C" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-        <circle cx="28" cy="28" r="6" fill="none" stroke="#C9A84C" strokeWidth="1.5"/>
-        <path d="M28 16V20M28 36V40M16 28H20M36 28H40" stroke="#8A6A1E" strokeWidth="1" strokeLinecap="round"/>
-        <circle cx="28" cy="28" r="2" fill="#C9A84C"/>
+        <path d="M28 10C18 10 10 18 10 28C10 38 18 46 28 46" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.5"/>
+        <path d="M28 10C38 10 46 18 46 28C46 38 38 46 28 46" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+        <circle cx="28" cy="28" r="6" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M28 16V20M28 36V40M16 28H20M36 28H40" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/>
+        <circle cx="28" cy="28" r="2.5" fill="currentColor"/>
       </svg>
     ),
   },
 ];
 
+const cardBase =
+  "group relative flex flex-col gap-5 p-[clamp(1.5rem,4vw,2.5rem)] border transition-all duration-300 cursor-default hover:-translate-y-0.5";
+
+const variants: Record<string, string> = {
+  default:
+    "bg-canvas/60 border-gold/10 hover:border-gold/30 hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/30",
+  large:
+    "bg-canvas/60 border-gold/10 hover:border-gold/30 hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/30 md:col-span-2 lg:col-span-2",
+  accent:
+    "bg-gold/5 border-gold/20 hover:border-gold/40 hover:shadow-lg hover:shadow-gold/5 md:col-span-2 lg:col-span-2",
+};
+
 export default function Features() {
   return (
-    <section id="features" style={{
-      padding: "clamp(4rem, 8vw, 8rem) clamp(1.2rem, 5vw, 4rem)",
-      position: "relative",
-      background: "var(--stone)",
-    }}>
-      {/* Línea superior dorada */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: 4,
-        background: "linear-gradient(to right, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent)",
-      }} />
+    <section id="features" className="relative bg-surface px-[clamp(1.2rem,5vw,4rem)] py-[clamp(4rem,8vw,8rem)]">
+      {/* Línea superior */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[3px]"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, var(--raw-gold-dim), var(--raw-gold), var(--raw-gold-dim), transparent)",
+        }}
+      />
 
-      <p style={{
-        fontFamily: "var(--font-cinzel), serif",
-        fontSize: "0.7rem", letterSpacing: "0.4em",
-        textTransform: "uppercase", color: "var(--gold)",
-        textAlign: "center", marginBottom: "1rem",
-      }}>
+      <p className="font-cinzel text-[0.7rem] tracking-[0.4em] uppercase text-gold text-center mb-4">
         El Grimorio de Herramientas
       </p>
-
-      <h2 style={{
-        fontFamily: "'Cinzel Decorative', serif",
-        fontSize: "clamp(1.8rem, 4vw, 3rem)",
-        textAlign: "center", color: "var(--parchment)",
-        marginBottom: "1rem", lineHeight: 1.2,
-      }}>
+      <h2 className="font-cinzel-dec text-[clamp(1.8rem,4vw,3rem)] text-center text-prose mb-4 leading-[1.2]">
         Todo lo que un aventurero necesita
       </h2>
-
-      <p style={{
-        textAlign: "center", fontSize: "1.15rem",
-        fontStyle: "italic", color: "var(--parchment-deeper)",
-        maxWidth: 500, margin: "0 auto clamp(2.5rem, 5vw, 5rem)", lineHeight: 1.7,
-      }}>
+      <p className="text-center text-[1.1rem] italic text-prose-muted max-w-[480px] mx-auto mb-[clamp(2.5rem,5vw,5rem)] leading-[1.7]">
         Desde la creación de tu héroe hasta el seguimiento de la última batalla.
       </p>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-        gap: 2, maxWidth: 1200, margin: "0 auto",
-      }}>
+      {/* Bento grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 max-w-[1200px] mx-auto">
         {features.map((f) => (
-          <div key={f.title} style={{
-            background: "rgba(26,20,16,0.6)",
-            padding: "clamp(1.5rem, 4vw, 3rem) clamp(1.2rem, 3vw, 2.5rem)",
-            border: "1px solid rgba(201,168,76,0.12)",
-            transition: "background 0.3s, border-color 0.3s",
-            cursor: "default",
-          }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLDivElement).style.background = "rgba(26,20,16,0.85)";
-              (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(201,168,76,0.3)";
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLDivElement).style.background = "rgba(26,20,16,0.6)";
-              (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(201,168,76,0.12)";
-            }}
-          >
-            <div style={{ marginBottom: "1.5rem" }}>{f.icon}</div>
-            <h3 style={{
-              fontFamily: "var(--font-cinzel), serif",
-              fontSize: "1.1rem", letterSpacing: "0.05em",
-              color: "var(--gold-light)", marginBottom: "0.8rem",
-            }}>
-              {f.title}
-            </h3>
-            <p style={{
-              fontSize: "1rem",
-              color: "var(--parchment-deeper)",
-              lineHeight: 1.75,
-            }}>
-              {f.desc}
-            </p>
+          <div key={f.id} className={`${cardBase} ${variants[f.variant]}`}>
+            {/* Icono */}
+            <div className={`text-gold ${f.variant === "large" ? "w-[72px] h-[72px]" : "w-[56px] h-[56px]"}`}>
+              {f.icon}
+            </div>
+
+            <div>
+              <h3
+                className={`font-cinzel text-gold-subtle tracking-[0.04em] mb-2 ${
+                  f.variant === "large" ? "text-[1.25rem]" : "text-[1rem]"
+                }`}
+              >
+                {f.title}
+              </h3>
+              <p className="text-[0.95rem] text-prose-muted leading-[1.75]">
+                {f.desc}
+              </p>
+            </div>
+
+            {/* Accent badge para la IA */}
+            {f.variant === "accent" && (
+              <div className="absolute top-4 right-4 font-cinzel text-[0.55rem] tracking-[0.2em] uppercase text-gold border border-gold/20 px-2 py-1">
+                IA
+              </div>
+            )}
           </div>
         ))}
       </div>
