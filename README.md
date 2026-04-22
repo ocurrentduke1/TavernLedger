@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TavernLedger
 
-## Getting Started
+Aplicación web para crear y gestionar personajes de D&D en grupo, con seguimiento de campañas, grimorio de hechizos, bestiario, mapas interactivos y generación de trasfondos con IA.
 
-First, run the development server:
+## Stack Tecnológico
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 16** (App Router)
+- **React 19** + TypeScript
+- **Tailwind CSS v4** (configuración en CSS, sin `tailwind.config.ts`)
+- **Supabase** (autenticación + base de datos + storage)
+- **next-themes v0.4** (modo oscuro/claro)
+- **Groq** (generación de trasfondos con IA)
+- **Open5e API** (bestiario y grimorio de hechizos)
+- **Playwright** (tests E2E)
+
+## Funcionalidades implementadas
+
+### Autenticación
+- Registro, login, recuperación y reset de contraseña
+- Sesiones gestionadas por Supabase Auth
+
+### Personajes
+- Creación de personajes D&D 5e con ficha completa (stats, habilidades, HP, CA, rasgos, equipo, trasfondo)
+- Listado y vista de detalle de personajes
+- Generación de trasfondo con IA (Groq) con control de uso
+
+### Campañas
+- Creación y gestión de campañas
+- Visibilidad configurable por campaña
+- Asociación de personajes y mapas a campañas
+
+### Bestiario
+- Consulta de monstruos vía Open5e API
+- Filtros por tipo de criatura y CR
+- Paginación y vista de detalle de cada monstruo
+
+### Grimorio
+- Consulta de hechizos vía Open5e API
+- Filtros por nivel, escuela y clase
+- Vista de detalle de cada hechizo
+
+### Mapas
+- Subida de imágenes de mapas por campaña (Supabase Storage)
+- Canvas interactivo con controles de zoom/pan
+- Paleta de tokens para colocar sobre el mapa
+- Gestión (crear, ver, eliminar) de mapas por campaña
+
+### UI/UX
+- Tema oscuro (por defecto) y tema claro "stone & marble"
+- Tipografía medieval: Cinzel Decorative, Cinzel, Crimson Pro
+- Textura grain en el fondo
+- Diseño responsivo
+
+## Estructura del proyecto
+
+```
+app/
+├── auth/reset-password/
+├── dashboard/
+│   ├── bestiary/          # Bestiario (Open5e)
+│   ├── campaigns/         # Gestión de campañas
+│   ├── characters/        # Personajes D&D
+│   ├── dice/              # Simulador de dados
+│   ├── explore/           # Exploración
+│   ├── maps/              # Mapas de campaña
+│   ├── settings/          # Configuración
+│   └── spellbook/         # Grimorio (Open5e)
+├── login/
+├── register/
+└── forgot-password/
+
+components/
+├── dashboard/
+│   ├── maps/              # MapCanvas, MapControls, TokenPalette, UploadMapImage
+│   ├── DashboardHeader
+│   ├── QuickActions
+│   └── Sidebar
+├── landing/               # Navbar, Hero, Features, CharacterPreview, etc.
+├── ThemeProvider
+└── ThemeToggle
+
+supabase/migrations/       # Migraciones de base de datos
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Crea un archivo `.env.local` con:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+GROQ_API_KEY=
+```
 
-## Learn More
+## Desarrollo
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Abre [http://localhost:3000](http://localhost:3000) en el navegador.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tests
 
-## Deploy on Vercel
+```bash
+npm test           # Playwright E2E
+npm run test:ui    # Playwright con interfaz visual
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Base de datos
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Las migraciones están en `supabase/migrations/`. Para aplicarlas localmente:
+
+```bash
+supabase db reset
+```
