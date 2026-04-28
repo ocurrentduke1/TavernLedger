@@ -1,5 +1,6 @@
 import Sidebar from "@/components/dashboard/Sidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import { AnimationProvider } from "@/components/providers/AnimationProvider";
 
 export default function DashboardLayout({
   children,
@@ -11,7 +12,7 @@ export default function DashboardLayout({
       <Sidebar />
       <main className="flex-1 ml-60 min-h-screen flex flex-col">
         <DashboardHeader title="Panel del Aventurero" />
-        {children}
+        <AnimationProvider>{children}</AnimationProvider>
       </main>
     </div>
   );
