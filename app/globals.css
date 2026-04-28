@@ -13,6 +13,28 @@
   --raw-prose-soft:  #3D2E15;
   --raw-prose-muted: #7A6040;
   --raw-blood-ui:    #9B2020;
+
+  /* ── shadcn/ui token aliases — light ── */
+  --background:           var(--raw-canvas);
+  --foreground:           var(--raw-prose);
+  --card:                 var(--raw-surface);
+  --card-foreground:      var(--raw-prose);
+  --popover:              var(--raw-surface);
+  --popover-foreground:   var(--raw-prose);
+  --primary:              var(--raw-gold);
+  --primary-foreground:   #1A1410;
+  --secondary:            var(--raw-surface);
+  --secondary-foreground: var(--raw-prose-soft);
+  --muted:                var(--raw-surface);
+  --muted-foreground:     var(--raw-prose-muted);
+  --accent:               var(--raw-gold-subtle);
+  --accent-foreground:    #1A1410;
+  --destructive:          var(--raw-blood-ui);
+  --destructive-foreground: #F5EDD8;
+  --border:               color-mix(in srgb, var(--raw-gold) 18%, transparent);
+  --input:                color-mix(in srgb, var(--raw-gold) 12%, transparent);
+  --ring:                 var(--raw-gold);
+  --radius:               0rem;
 }
 
 /* ── Dark theme ── */
@@ -26,6 +48,28 @@
   --raw-prose-soft:  #E8D9B5;
   --raw-prose-muted: #8A7250;
   --raw-blood-ui:    #C2442A;
+
+  /* ── shadcn/ui token aliases — dark ── */
+  --background:           var(--raw-canvas);
+  --foreground:           var(--raw-prose);
+  --card:                 var(--raw-surface);
+  --card-foreground:      var(--raw-prose);
+  --popover:              var(--raw-surface);
+  --popover-foreground:   var(--raw-prose);
+  --primary:              var(--raw-gold);
+  --primary-foreground:   #1A1410;
+  --secondary:            var(--raw-surface);
+  --secondary-foreground: var(--raw-prose-soft);
+  --muted:                var(--raw-surface);
+  --muted-foreground:     var(--raw-prose-muted);
+  --accent:               var(--raw-gold-subtle);
+  --accent-foreground:    #1A1410;
+  --destructive:          var(--raw-blood-ui);
+  --destructive-foreground: #F5EDD8;
+  --border:               color-mix(in srgb, var(--raw-gold) 15%, transparent);
+  --input:                color-mix(in srgb, var(--raw-gold) 10%, transparent);
+  --ring:                 var(--raw-gold);
+  --radius:               0rem;
 }
 
 /* ── Tailwind color tokens ── */
