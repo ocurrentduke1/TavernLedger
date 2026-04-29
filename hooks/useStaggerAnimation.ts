@@ -1,4 +1,6 @@
-export const staggerContainer = {
+import type { Variants } from "framer-motion";
+
+export const staggerContainer: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -7,7 +9,7 @@ export const staggerContainer = {
   },
 };
 
-export const staggerItem = {
+export const staggerItem: Variants = {
   hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
