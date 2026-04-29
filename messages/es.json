@@ -26,7 +26,9 @@
     "createCharacter": "Crear Personaje",
     "public": "Pública",
     "private": "Privada",
-    "level": "Nv."
+    "level": "Nv.",
+    "joinWithCode": "Unirse con Código",
+    "exploreCampaigns": "Explorar Campañas"
   },
   "characters": {
     "title": "Mis Personajes",

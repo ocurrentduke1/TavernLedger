@@ -26,7 +26,9 @@
     "createCharacter": "Create Character",
     "public": "Public",
     "private": "Private",
-    "level": "Lv."
+    "level": "Lv.",
+    "joinWithCode": "Join with Code",
+    "exploreCampaigns": "Explore Campaigns"
   },
   "characters": {
     "title": "My Characters",
