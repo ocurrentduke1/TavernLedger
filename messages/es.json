@@ -1,0 +1,175 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "characters": "Mis Personajes",
+    "campaigns": "Mis Campañas",
+    "explore": "Buscar Campañas",
+    "dice": "Dados",
+    "maps": "Mapas",
+    "bestiary": "Bestiario",
+    "spellbook": "Grimorio",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión",
+    "tagline": "Panel del Aventurero"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido de vuelta",
+    "title": "Panel del Aventurero",
+    "quickActions": "Acciones Rápidas",
+    "activeCampaigns": "Campañas Activas",
+    "myCharacters": "Mis Personajes",
+    "viewAll": "Ver todas →",
+    "viewAllChars": "Ver todos →",
+    "noCampaigns": "Aún no tienes campañas activas",
+    "noCharacters": "Aún no tienes personajes",
+    "createCampaign": "Crear Campaña",
+    "createCharacter": "Crear Personaje",
+    "public": "Pública",
+    "private": "Privada",
+    "level": "Nv."
+  },
+  "characters": {
+    "title": "Mis Personajes",
+    "subtitle": "Héroes y Aventureros",
+    "create": "Nuevo Personaje",
+    "empty": "Aún no tienes personajes",
+    "emptyHint": "Crea tu primer héroe para comenzar tu aventura.",
+    "loading": "Cargando personajes...",
+    "error": "No se pudieron cargar los personajes.",
+    "level": "Nivel",
+    "hp": "PV"
+  },
+  "campaigns": {
+    "title": "Mis Campañas",
+    "subtitle": "Historias y Aventuras",
+    "create": "Nueva Campaña",
+    "empty": "Aún no tienes campañas",
+    "emptyHint": "Crea tu primera campaña para comenzar.",
+    "loading": "Cargando campañas...",
+    "error": "No se pudieron cargar las campañas.",
+    "players": "jugadores",
+    "public": "Pública",
+    "private": "Privada"
+  },
+  "bestiary": {
+    "title": "Bestiario",
+    "subtitle": "Criaturas y Monstruos",
+    "search": "Buscar criatura...",
+    "loading": "Convocando criaturas...",
+    "error": "No se pudo cargar el bestiario.",
+    "empty": "No se encontraron criaturas.",
+    "contentInEnglish": "Contenido en inglés (Open5e API)",
+    "cr": "ND",
+    "type": "Tipo",
+    "size": "Tamaño"
+  },
+  "spellbook": {
+    "title": "Grimorio",
+    "subtitle": "Hechizos y Conjuros",
+    "search": "Buscar hechizo...",
+    "loading": "Consultando el grimorio...",
+    "error": "No se pudo cargar el grimorio.",
+    "empty": "No se encontraron hechizos.",
+    "contentInEnglish": "Contenido en inglés (Open5e API)",
+    "level": "Nivel",
+    "school": "Escuela",
+    "castingTime": "Tiempo de conjuro",
+    "range": "Alcance",
+    "duration": "Duración"
+  },
+  "maps": {
+    "title": "Mapas",
+    "subtitle": "Territorios y Dungeons",
+    "create": "Nuevo Mapa",
+    "empty": "No hay mapas en esta campaña.",
+    "loading": "Cargando mapas...",
+    "error": "No se pudieron cargar los mapas."
+  },
+  "dice": {
+    "title": "Dados",
+    "subtitle": "Lanza los dados del destino",
+    "roll": "Tirar",
+    "result": "Resultado",
+    "history": "Historial"
+  },
+  "settings": {
+    "title": "Configuración",
+    "subtitle": "Tu Cuenta",
+    "tabs": {
+      "profile": "Perfil",
+      "appearance": "Apariencia",
+      "language": "Idioma",
+      "email": "Email",
+      "password": "Contraseña"
+    },
+    "profile": {
+      "displayName": "Nombre Mostrado",
+      "displayNameHint": "Este es el nombre que verán otros jugadores en tus campañas.",
+      "email": "Email (No editable)",
+      "emailHint": "Usa la pestaña «Email» para cambiar tu dirección de email.",
+      "save": "Guardar Perfil",
+      "saving": "Guardando..."
+    },
+    "appearance": {
+      "title": "Modo de visualización",
+      "dark": "Modo Oscuro",
+      "darkHint": "Noche de taberna — ideal para sesiones largas.",
+      "light": "Modo Claro",
+      "lightHint": "Luz del día — más legible en entornos iluminados."
+    },
+    "language": {
+      "title": "Idioma de la interfaz",
+      "hint": "El contenido de las APIs externas siempre se muestra en inglés.",
+      "es": "Español",
+      "en": "English",
+      "saved": "Idioma guardado correctamente."
+    },
+    "email": {
+      "current": "Email Actual",
+      "new": "Nuevo Email",
+      "newHint": "Te enviaremos un email de confirmación. Debes verificarlo para completar el cambio.",
+      "submit": "Cambiar Email",
+      "submitting": "Enviando...",
+      "sent": "✓ Email de confirmación enviado. Revisa tu bandeja de entrada."
+    },
+    "password": {
+      "current": "Contraseña Actual",
+      "new": "Nueva Contraseña",
+      "newHint": "Mínimo 6 caracteres.",
+      "confirm": "Confirmar Contraseña",
+      "submit": "Cambiar Contraseña",
+      "submitting": "Actualizando..."
+    },
+    "account": {
+      "title": "Información de Cuenta",
+      "body": "Tu email es {email}. Todos tus cambios se guardan inmediatamente."
+    },
+    "back": "← Volver al Dashboard",
+    "successProfile": "Perfil actualizado correctamente.",
+    "successPassword": "Contraseña actualizada correctamente.",
+    "errorLoad": "No se pudo cargar la configuración.",
+    "errorProfile": "No se pudo actualizar el perfil.",
+    "errorEmail": "No se pudo actualizar el email.",
+    "errorEmailTaken": "Este email ya está registrado.",
+    "errorEmailRequired": "El email es requerido.",
+    "errorEmailSame": "El nuevo email debe ser diferente al actual.",
+    "errorPasswordCurrent": "Debes ingresar tu contraseña actual.",
+    "errorPasswordRequired": "La nueva contraseña es requerida.",
+    "errorPasswordLength": "La contraseña debe tener al menos 6 caracteres.",
+    "errorPasswordMatch": "Las contraseñas no coinciden.",
+    "errorPasswordSame": "La nueva contraseña debe ser diferente a la actual.",
+    "errorPassword": "No se pudo cambiar la contraseña."
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error.",
+    "back": "← Volver",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "empty": "Sin resultados."
+  }
+}

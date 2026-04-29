@@ -1,0 +1,175 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "characters": "My Characters",
+    "campaigns": "My Campaigns",
+    "explore": "Browse Campaigns",
+    "dice": "Dice",
+    "maps": "Maps",
+    "bestiary": "Bestiary",
+    "spellbook": "Spellbook",
+    "settings": "Settings",
+    "logout": "Log Out",
+    "tagline": "Adventurer's Panel"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "title": "Adventurer's Panel",
+    "quickActions": "Quick Actions",
+    "activeCampaigns": "Active Campaigns",
+    "myCharacters": "My Characters",
+    "viewAll": "View all →",
+    "viewAllChars": "View all →",
+    "noCampaigns": "No active campaigns yet",
+    "noCharacters": "No characters yet",
+    "createCampaign": "Create Campaign",
+    "createCharacter": "Create Character",
+    "public": "Public",
+    "private": "Private",
+    "level": "Lv."
+  },
+  "characters": {
+    "title": "My Characters",
+    "subtitle": "Heroes & Adventurers",
+    "create": "New Character",
+    "empty": "No characters yet",
+    "emptyHint": "Create your first hero to begin your adventure.",
+    "loading": "Loading characters...",
+    "error": "Could not load characters.",
+    "level": "Level",
+    "hp": "HP"
+  },
+  "campaigns": {
+    "title": "My Campaigns",
+    "subtitle": "Stories & Adventures",
+    "create": "New Campaign",
+    "empty": "No campaigns yet",
+    "emptyHint": "Create your first campaign to get started.",
+    "loading": "Loading campaigns...",
+    "error": "Could not load campaigns.",
+    "players": "players",
+    "public": "Public",
+    "private": "Private"
+  },
+  "bestiary": {
+    "title": "Bestiary",
+    "subtitle": "Creatures & Monsters",
+    "search": "Search creature...",
+    "loading": "Summoning creatures...",
+    "error": "Could not load the bestiary.",
+    "empty": "No creatures found.",
+    "contentInEnglish": "Content in English (Open5e API)",
+    "cr": "CR",
+    "type": "Type",
+    "size": "Size"
+  },
+  "spellbook": {
+    "title": "Spellbook",
+    "subtitle": "Spells & Cantrips",
+    "search": "Search spell...",
+    "loading": "Consulting the grimoire...",
+    "error": "Could not load the spellbook.",
+    "empty": "No spells found.",
+    "contentInEnglish": "Content in English (Open5e API)",
+    "level": "Level",
+    "school": "School",
+    "castingTime": "Casting Time",
+    "range": "Range",
+    "duration": "Duration"
+  },
+  "maps": {
+    "title": "Maps",
+    "subtitle": "Territories & Dungeons",
+    "create": "New Map",
+    "empty": "No maps in this campaign.",
+    "loading": "Loading maps...",
+    "error": "Could not load maps."
+  },
+  "dice": {
+    "title": "Dice",
+    "subtitle": "Roll the dice of fate",
+    "roll": "Roll",
+    "result": "Result",
+    "history": "History"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Your Account",
+    "tabs": {
+      "profile": "Profile",
+      "appearance": "Appearance",
+      "language": "Language",
+      "email": "Email",
+      "password": "Password"
+    },
+    "profile": {
+      "displayName": "Display Name",
+      "displayNameHint": "This is the name other players will see in your campaigns.",
+      "email": "Email (Read-only)",
+      "emailHint": "Use the «Email» tab to change your email address.",
+      "save": "Save Profile",
+      "saving": "Saving..."
+    },
+    "appearance": {
+      "title": "Display mode",
+      "dark": "Dark Mode",
+      "darkHint": "Tavern night — ideal for long sessions.",
+      "light": "Light Mode",
+      "lightHint": "Daylight — easier to read in bright environments."
+    },
+    "language": {
+      "title": "Interface language",
+      "hint": "Content from external APIs is always shown in English.",
+      "es": "Español",
+      "en": "English",
+      "saved": "Language saved."
+    },
+    "email": {
+      "current": "Current Email",
+      "new": "New Email",
+      "newHint": "We will send a confirmation email. You must verify it to complete the change.",
+      "submit": "Change Email",
+      "submitting": "Sending...",
+      "sent": "✓ Confirmation email sent. Check your inbox."
+    },
+    "password": {
+      "current": "Current Password",
+      "new": "New Password",
+      "newHint": "Minimum 6 characters.",
+      "confirm": "Confirm Password",
+      "submit": "Change Password",
+      "submitting": "Updating..."
+    },
+    "account": {
+      "title": "Account Information",
+      "body": "Your email is {email}. All changes are saved immediately."
+    },
+    "back": "← Back to Dashboard",
+    "successProfile": "Profile updated successfully.",
+    "successPassword": "Password updated successfully.",
+    "errorLoad": "Could not load settings.",
+    "errorProfile": "Could not update profile.",
+    "errorEmail": "Could not update email.",
+    "errorEmailTaken": "This email is already registered.",
+    "errorEmailRequired": "Email is required.",
+    "errorEmailSame": "New email must be different from current.",
+    "errorPasswordCurrent": "You must enter your current password.",
+    "errorPasswordRequired": "New password is required.",
+    "errorPasswordLength": "Password must be at least 6 characters.",
+    "errorPasswordMatch": "Passwords do not match.",
+    "errorPasswordSame": "New password must be different from current.",
+    "errorPassword": "Could not change password."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred.",
+    "back": "← Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "empty": "No results."
+  }
+}

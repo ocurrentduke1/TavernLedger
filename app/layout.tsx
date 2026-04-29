@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cinzel, Cinzel_Decorative, Crimson_Pro } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LocaleProvider } from "@/components/providers/LocaleProvider";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -40,7 +41,9 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col bg-canvas text-prose transition-colors duration-300">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <LocaleProvider>{children}</LocaleProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
