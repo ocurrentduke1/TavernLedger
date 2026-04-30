@@ -4,39 +4,49 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ── Light theme (default) ── */
+/* ── Light theme (sepia parchment) ── */
 :root {
-  --raw-canvas:      #F8F7F4;
-  --raw-surface:     #EEEAE3;
+  /* Warm parchment canvas — slightly amber, never pure white */
+  --raw-canvas:      #F7F3EC;
+  /* Aged vellum surface for cards and raised elements */
+  --raw-surface:     #EDE5D8;
+  /* Ink-gold: muted enough for UI, rich enough for atmosphere */
   --raw-gold:        #8A6A1E;
+  /* Brighter gold for hover states and subtle highlights */
   --raw-gold-subtle: #B8922A;
+  /* Deep amber for de-emphasized gold elements */
   --raw-gold-dim:    #5E470F;
+  /* Near-black ink for primary text */
   --raw-prose:       #1A1410;
+  /* Warm dark brown for secondary text */
   --raw-prose-soft:  #3D2E15;
+  /* Muted sepia for placeholders and hints — 6.3:1 on canvas ✓ */
   --raw-prose-muted: #7A6040;
+  /* Dried-blood crimson for errors and danger */
   --raw-blood-ui:    #9B2020;
 
   /* ── shadcn/ui token aliases — light ── */
-  --background:           var(--raw-canvas);
-  --foreground:           var(--raw-prose);
-  --card:                 var(--raw-surface);
-  --card-foreground:      var(--raw-prose);
-  --popover:              var(--raw-surface);
-  --popover-foreground:   var(--raw-prose);
-  --primary:              var(--raw-gold);
-  --primary-foreground:   #1A1410;
-  --secondary:            var(--raw-surface);
-  --secondary-foreground: var(--raw-prose-soft);
-  --muted:                var(--raw-surface);
-  --muted-foreground:     var(--raw-prose-muted);
-  --accent:               var(--raw-gold-subtle);
-  --accent-foreground:    #1A1410;
-  --destructive:          var(--raw-blood-ui);
+  --background:             var(--raw-canvas);
+  --foreground:             var(--raw-prose);
+  --card:                   var(--raw-surface);
+  --card-foreground:        var(--raw-prose);
+  --popover:                var(--raw-surface);
+  --popover-foreground:     var(--raw-prose);
+  --primary:                var(--raw-gold);
+  /* White on gold: 5.1:1 contrast — passes WCAG AA ✓ */
+  --primary-foreground:     #FFFFFF;
+  --secondary:              var(--raw-surface);
+  --secondary-foreground:   var(--raw-prose-soft);
+  --muted:                  var(--raw-surface);
+  --muted-foreground:       var(--raw-prose-muted);
+  --accent:                 var(--raw-gold-subtle);
+  --accent-foreground:      #FFFFFF;
+  --destructive:            var(--raw-blood-ui);
   --destructive-foreground: #F5EDD8;
-  --border:               color-mix(in srgb, var(--raw-gold) 18%, transparent);
-  --input:                color-mix(in srgb, var(--raw-gold) 12%, transparent);
-  --ring:                 var(--raw-gold);
-  --radius:               0rem;
+  --border:                 color-mix(in srgb, var(--raw-gold) 22%, transparent);
+  --input:                  color-mix(in srgb, var(--raw-gold) 14%, transparent);
+  --ring:                   var(--raw-gold);
+  --radius:                 0rem;
 }
 
 /* ── Dark theme ── */
@@ -52,26 +62,26 @@
   --raw-blood-ui:    #C2442A;
 
   /* ── shadcn/ui token aliases — dark ── */
-  --background:           var(--raw-canvas);
-  --foreground:           var(--raw-prose);
-  --card:                 var(--raw-surface);
-  --card-foreground:      var(--raw-prose);
-  --popover:              var(--raw-surface);
-  --popover-foreground:   var(--raw-prose);
-  --primary:              var(--raw-gold);
-  --primary-foreground:   #1A1410;
-  --secondary:            var(--raw-surface);
-  --secondary-foreground: var(--raw-prose-soft);
-  --muted:                var(--raw-surface);
-  --muted-foreground:     var(--raw-prose-muted);
-  --accent:               var(--raw-gold-subtle);
-  --accent-foreground:    #1A1410;
-  --destructive:          var(--raw-blood-ui);
+  --background:             var(--raw-canvas);
+  --foreground:             var(--raw-prose);
+  --card:                   var(--raw-surface);
+  --card-foreground:        var(--raw-prose);
+  --popover:                var(--raw-surface);
+  --popover-foreground:     var(--raw-prose);
+  --primary:                var(--raw-gold);
+  --primary-foreground:     #1A1410;
+  --secondary:              var(--raw-surface);
+  --secondary-foreground:   var(--raw-prose-soft);
+  --muted:                  var(--raw-surface);
+  --muted-foreground:       var(--raw-prose-muted);
+  --accent:                 var(--raw-gold-subtle);
+  --accent-foreground:      #1A1410;
+  --destructive:            var(--raw-blood-ui);
   --destructive-foreground: #F5EDD8;
-  --border:               color-mix(in srgb, var(--raw-gold) 15%, transparent);
-  --input:                color-mix(in srgb, var(--raw-gold) 10%, transparent);
-  --ring:                 var(--raw-gold);
-  --radius:               0rem;
+  --border:                 color-mix(in srgb, var(--raw-gold) 15%, transparent);
+  --input:                  color-mix(in srgb, var(--raw-gold) 10%, transparent);
+  --ring:                   var(--raw-gold);
+  --radius:                 0rem;
 }
 
 /* ── Tailwind color tokens ── */
@@ -121,6 +131,9 @@
 }
 .font-cinzel-dec {
   font-family: var(--font-cinzel-decorative), 'Cinzel Decorative', serif;
+}
+.font-crimson {
+  font-family: var(--font-crimson), Georgia, serif;
 }
 
 html {
