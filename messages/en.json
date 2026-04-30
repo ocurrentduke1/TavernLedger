@@ -146,6 +146,7 @@
       "title": "Account Information",
       "body": "Your email is {email}. All changes are saved immediately."
     },
+    "loading": "Loading settings...",
     "back": "← Back to Dashboard",
     "successProfile": "Profile updated successfully.",
     "successPassword": "Password updated successfully.",

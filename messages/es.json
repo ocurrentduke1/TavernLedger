@@ -146,6 +146,7 @@
       "title": "Información de Cuenta",
       "body": "Tu email es {email}. Todos tus cambios se guardan inmediatamente."
     },
+    "loading": "Cargando configuración...",
     "back": "← Volver al Dashboard",
     "successProfile": "Perfil actualizado correctamente.",
     "successPassword": "Contraseña actualizada correctamente.",
