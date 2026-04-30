@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
 
 const API_BASE = "https://api.open5e.com/v1";
 const PAGE_SIZE = 18;
@@ -52,16 +54,17 @@ function crColor(cr: number): string {
 }
 
 export default function BestiaryPage() {
-  const [monsters, setMonsters]     = useState<MonsterSummary[]>([]);
-  const [loading, setLoading]       = useState(true);
-  const [error, setError]           = useState("");
+  const t = useTranslations("bestiary");
+  const [monsters, setMonsters]       = useState<MonsterSummary[]>([]);
+  const [loading, setLoading]         = useState(true);
+  const [error, setError]             = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch]         = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
-  const [page, setPage]             = useState(1);
-  const [total, setTotal]           = useState(0);
-  const [hasNext, setHasNext]       = useState(false);
-  const [hasPrev, setHasPrev]       = useState(false);
+  const [search, setSearch]           = useState("");
+  const [typeFilter, setTypeFilter]   = useState("");
+  const [page, setPage]               = useState(1);
+  const [total, setTotal]             = useState(0);
+  const [hasNext, setHasNext]         = useState(false);
+  const [hasPrev, setHasPrev]         = useState(false);
 
   // Debounce search input
   useEffect(() => {
@@ -97,111 +100,100 @@ export default function BestiaryPage() {
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  const iStyle = {
-    padding: "0.75rem 1rem",
-    background: "rgba(26,20,16,0.8)",
-    border: "1px solid rgba(201,168,76,0.2)",
-    color: "var(--parchment)",
-    fontFamily: "var(--font-crimson), serif",
-    fontSize: "1rem", outline: "none",
-    width: "100%", boxSizing: "border-box" as const,
-  };
-
   return (
-    <div style={{ padding: "3rem" }}>
+    <div className="p-12">
 
-      {/* ── Header ── */}
-      <div style={{ marginBottom: "2.5rem" }}>
-        <p style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "0.4rem" }}>
-          D&D 5e · Open5e SRD
+      {/* Header */}
+      <div className="mb-10">
+        <p className="font-cinzel text-[0.65rem] tracking-[0.3em] uppercase text-gold mb-1">
+          {t("subtitle")}
         </p>
-        <h1 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: "clamp(1.5rem, 3vw, 2.2rem)", color: "var(--parchment)", lineHeight: 1.2, marginBottom: "0.4rem" }}>
-          Bestiario
+        <h1 className="font-cinzel-dec text-[clamp(1.5rem,3vw,2.2rem)] text-prose leading-tight mb-1">
+          {t("title")}
         </h1>
-        <p style={{ fontFamily: "var(--font-crimson), serif", fontSize: "1rem", color: "var(--text-muted)", fontStyle: "italic" }}>
-          {loading ? "Consultando el archivo de criaturas..." : `${total.toLocaleString()} criaturas en el registro`}
+        <p className="font-crimson text-[1rem] text-prose-muted italic">
+          {loading ? t("loading") : `${total.toLocaleString()} ${t("creatures")}`}
         </p>
       </div>
 
-      {/* ── Filters ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 220px", gap: "1rem", marginBottom: "2rem", alignItems: "end" }}>
+      {/* Filters */}
+      <div className="grid grid-cols-[1fr_220px] gap-4 mb-8 items-end">
         <div>
-          <label style={{ display: "block", fontFamily: "var(--font-cinzel), serif", fontSize: "0.62rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "0.4rem" }}>
-            Buscar criatura
+          <label className="block font-cinzel text-[0.62rem] tracking-[0.15em] uppercase text-gold mb-1">
+            {t("search")}
           </label>
-          <input
+          <Input
             type="text"
             value={searchInput}
             onChange={e => setSearchInput(e.target.value)}
-            placeholder="Dragón, Vampiro, Liche..."
-            style={iStyle}
+            placeholder={t("searchPlaceholder")}
+            className="bg-canvas/80 border-gold/20 text-prose font-crimson text-[1rem] focus:border-gold/50 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
         <div>
-          <label style={{ display: "block", fontFamily: "var(--font-cinzel), serif", fontSize: "0.62rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "0.4rem" }}>
-            Tipo
+          <label className="block font-cinzel text-[0.62rem] tracking-[0.15em] uppercase text-gold mb-1">
+            {t("type")}
           </label>
           <select
             value={typeFilter}
             onChange={e => { setTypeFilter(e.target.value); setPage(1); }}
-            style={iStyle}
+            className="w-full px-3 py-2 bg-canvas/80 border border-gold/20 text-prose font-crimson text-[1rem] outline-none focus:border-gold/50 transition-colors"
           >
-            <option value="">Todos los tipos</option>
+            <option value="">{t("allTypes")}</option>
             {TYPE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
       </div>
 
       {error && (
-        <p style={{ color: "var(--blood-light)", fontStyle: "italic", marginBottom: "1.5rem", fontSize: "0.9rem" }}>
-          Error al conectar con Open5e: {error}
+        <p className="text-blood-ui italic mb-6 text-[0.9rem]">
+          {t("error")} {error}
         </p>
       )}
 
-      {/* ── Grid ── */}
+      {/* Grid */}
       {loading ? (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem" }}>
+        <div className="grid grid-cols-3 gap-4">
           {Array.from({ length: 9 }).map((_, i) => (
-            <div key={i} style={{ height: 108, background: "rgba(58,50,40,0.25)", border: "1px solid rgba(201,168,76,0.06)" }} />
+            <div key={i} className="h-28 bg-surface/25 border border-gold/[0.06] animate-pulse" />
           ))}
         </div>
       ) : monsters.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "5rem 2rem" }}>
-          <p style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "0.5rem" }}>Sin resultados</p>
-          <p style={{ fontFamily: "var(--font-crimson), serif", fontSize: "0.95rem", color: "var(--text-muted)", fontStyle: "italic" }}>
-            Prueba con otro término de búsqueda o cambia el filtro de tipo.
+        <div className="text-center py-20 px-8">
+          <p className="font-cinzel text-[0.85rem] text-prose-muted mb-2">{t("noResults")}</p>
+          <p className="font-crimson text-[0.95rem] text-prose-muted italic">
+            {t("noResultsHint")}
           </p>
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "2.5rem" }}>
+        <div className="grid grid-cols-3 gap-4 mb-10">
           {monsters.map(m => (
-            <Link key={m.slug} href={`/dashboard/bestiary/${m.slug}`} style={{ textDecoration: "none" }}>
-              <div
-                style={{ padding: "1.1rem 1.3rem", background: "rgba(58,50,40,0.4)", border: "1px solid rgba(201,168,76,0.1)", cursor: "pointer", height: "100%", transition: "border-color 0.18s, background 0.18s", boxSizing: "border-box" as const }}
-                onMouseEnter={e => { const d = e.currentTarget as HTMLDivElement; d.style.borderColor = "rgba(201,168,76,0.35)"; d.style.background = "rgba(58,50,40,0.65)"; }}
-                onMouseLeave={e => { const d = e.currentTarget as HTMLDivElement; d.style.borderColor = "rgba(201,168,76,0.1)"; d.style.background = "rgba(58,50,40,0.4)"; }}
-              >
+            <Link key={m.slug} href={`/dashboard/bestiary/${m.slug}`} className="no-underline">
+              <div className="px-5 py-4 bg-surface/40 border border-gold/10 cursor-pointer h-full transition-all duration-[180ms] hover:border-gold/[0.35] hover:bg-surface/65 box-border">
                 {/* Name + CR */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                  <h3 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: "0.92rem", color: "var(--parchment)", lineHeight: 1.25, margin: 0, flex: 1 }}>
+                <div className="flex justify-between items-start gap-2 mb-2">
+                  <h3 className="font-cinzel-dec text-[0.92rem] text-prose leading-snug m-0 flex-1">
                     {m.name}
                   </h3>
-                  <span style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.6rem", letterSpacing: "0.05em", padding: "0.18rem 0.5rem", border: `1px solid ${crColor(m.cr)}`, color: crColor(m.cr), background: "rgba(0,0,0,0.25)", flexShrink: 0, whiteSpace: "nowrap" as const }}>
-                    CR {m.challenge_rating || "0"}
+                  <span
+                    className="font-cinzel text-[0.6rem] tracking-[0.05em] px-2 py-0.5 bg-black/25 shrink-0 whitespace-nowrap border"
+                    style={{ color: crColor(m.cr), borderColor: crColor(m.cr) }}
+                  >
+                    {t("cr")} {m.challenge_rating || "0"}
                   </span>
                 </div>
 
                 {/* Type */}
-                <p style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.6rem", letterSpacing: "0.06em", textTransform: "capitalize", color: "var(--text-muted)", marginBottom: "0.75rem" }}>
+                <p className="font-cinzel text-[0.6rem] tracking-[0.06em] capitalize text-prose-muted mb-3">
                   {[m.size, m.type, m.subtype ? `(${m.subtype})` : ""].filter(Boolean).join(" ")}
                 </p>
 
                 {/* Stats row */}
-                <div style={{ display: "flex", gap: "1.2rem" }}>
-                  {[["CA", m.armor_class], ["PV", m.hit_points]].map(([label, val]) => (
-                    <div key={label as string}>
-                      <span style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.52rem", color: "var(--gold)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label} </span>
-                      <span style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.78rem", color: "var(--parchment-deeper)" }}>{val}</span>
+                <div className="flex gap-5">
+                  {([[t("ac"), m.armor_class], [t("hp"), m.hit_points]] as [string, number][]).map(([label, val]) => (
+                    <div key={label}>
+                      <span className="font-cinzel text-[0.52rem] text-gold tracking-[0.1em] uppercase">{label} </span>
+                      <span className="font-cinzel text-[0.78rem] text-prose-soft">{val}</span>
                     </div>
                   ))}
                 </div>
@@ -211,25 +203,31 @@ export default function BestiaryPage() {
         </div>
       )}
 
-      {/* ── Pagination ── */}
+      {/* Pagination */}
       {!loading && totalPages > 1 && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1.2rem" }}>
+        <div className="flex items-center justify-center gap-5">
           <button
             onClick={() => setPage(p => p - 1)}
             disabled={!hasPrev}
-            style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.68rem", letterSpacing: "0.1em", textTransform: "uppercase", color: hasPrev ? "var(--gold)" : "var(--text-muted)", background: "transparent", border: "1px solid rgba(201,168,76,0.2)", padding: "0.6rem 1.2rem", cursor: hasPrev ? "pointer" : "not-allowed", opacity: hasPrev ? 1 : 0.4 }}
+            className={[
+              "font-cinzel text-[0.68rem] tracking-[0.1em] uppercase bg-transparent border border-gold/20 px-5 py-2 transition-opacity",
+              hasPrev ? "text-gold cursor-pointer opacity-100" : "text-prose-muted cursor-not-allowed opacity-40",
+            ].join(" ")}
           >
-            ← Anterior
+            {t("previous")}
           </button>
-          <span style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.68rem", color: "var(--text-muted)", letterSpacing: "0.08em" }}>
-            Página {page} de {totalPages}
+          <span className="font-cinzel text-[0.68rem] text-prose-muted tracking-[0.08em]">
+            {t("page")} {page} {t("of")} {totalPages}
           </span>
           <button
             onClick={() => setPage(p => p + 1)}
             disabled={!hasNext}
-            style={{ fontFamily: "var(--font-cinzel), serif", fontSize: "0.68rem", letterSpacing: "0.1em", textTransform: "uppercase", color: hasNext ? "var(--gold)" : "var(--text-muted)", background: "transparent", border: "1px solid rgba(201,168,76,0.2)", padding: "0.6rem 1.2rem", cursor: hasNext ? "pointer" : "not-allowed", opacity: hasNext ? 1 : 0.4 }}
+            className={[
+              "font-cinzel text-[0.68rem] tracking-[0.1em] uppercase bg-transparent border border-gold/20 px-5 py-2 transition-opacity",
+              hasNext ? "text-gold cursor-pointer opacity-100" : "text-prose-muted cursor-not-allowed opacity-40",
+            ].join(" ")}
           >
-            Siguiente →
+            {t("next")}
           </button>
         </div>
       )}
