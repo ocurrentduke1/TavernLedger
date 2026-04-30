@@ -1,15 +1,24 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-const actions = [
-  { label: "Nuevo Personaje", href: "/dashboard/characters/new", icon: "⚔" },
-  { label: "Nueva Campaña", href: "/dashboard/campaigns/new", icon: "📜" },
-  { label: "Unirse con Código", href: "/dashboard/explore?join=true", icon: "🔑" },
-  { label: "Explorar Campañas", href: "/dashboard/explore", icon: "🗺" },
+interface QuickAction {
+  key: "createCharacter" | "createCampaign" | "joinWithCode" | "exploreCampaigns";
+  href: string;
+  icon: string;
+}
+
+const actions: QuickAction[] = [
+  { key: "createCharacter", href: "/dashboard/characters/new", icon: "⚔" },
+  { key: "createCampaign", href: "/dashboard/campaigns/new", icon: "📜" },
+  { key: "joinWithCode", href: "/dashboard/explore?join=true", icon: "🔑" },
+  { key: "exploreCampaigns", href: "/dashboard/explore", icon: "🗺" },
 ];
 
 export default function QuickActions() {
+  const t = useTranslations("dashboard");
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {actions.map((action) => (
@@ -20,7 +29,7 @@ export default function QuickActions() {
         >
           <span className="text-[1.2rem]">{action.icon}</span>
           <span className="font-cinzel text-[0.78rem] tracking-[0.05em] text-gold-subtle">
-            {action.label}
+            {t(action.key)}
           </span>
         </Link>
       ))}

@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase";
 import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 type Campaign = {
   id: string;
@@ -16,6 +19,7 @@ type Campaign = {
 };
 
 export default function CampaignsPage() {
+  const t = useTranslations("campaigns");
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
@@ -51,176 +55,100 @@ export default function CampaignsPage() {
   };
 
   if (loading) return (
-    <div style={{ padding: "3rem" }}>
-      <p style={{
-        fontStyle: "italic", color: "var(--text-muted)",
-        fontFamily: "var(--font-cinzel), serif", fontSize: "0.85rem",
-      }}>
-        Cargando campañas...
+    <div className="p-12">
+      <p className="italic text-prose-muted font-cinzel text-[0.85rem]">
+        {t("loading")}
       </p>
     </div>
   );
 
   return (
-    <div style={{ padding: "3rem" }}>
+    <div className="p-12">
 
       {/* Header */}
-      <div style={{
-        display: "flex", alignItems: "center",
-        justifyContent: "space-between", marginBottom: "3rem",
-      }}>
+      <div className="flex items-center justify-between mb-12">
         <div>
-          <p style={{
-            fontFamily: "var(--font-cinzel), serif",
-            fontSize: "0.7rem", letterSpacing: "0.3em",
-            textTransform: "uppercase", color: "var(--gold)",
-            marginBottom: "0.5rem",
-          }}>
-            Mis Historias
+          <p className="font-cinzel text-[0.7rem] tracking-[0.3em] uppercase text-gold mb-2">
+            {t("subtitle")}
           </p>
-          <h1 style={{
-            fontFamily: "'Cinzel Decorative', serif",
-            fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
-            color: "var(--parchment)", lineHeight: 1.2,
-          }}>
-            Campañas
+          <h1 className="font-cinzel-dec text-[clamp(1.5rem,3vw,2.2rem)] text-prose leading-tight">
+            {t("title")}
           </h1>
         </div>
-        <Link href="/dashboard/campaigns/new" style={{
-          fontFamily: "var(--font-cinzel), serif",
-          fontSize: "0.78rem", letterSpacing: "0.12em",
-          textTransform: "uppercase", color: "var(--ink)",
-          background: "var(--gold)", padding: "0.8rem 1.8rem",
-          textDecoration: "none", display: "inline-block",
-        }}>
-          + Nueva Campaña
+        <Link
+          href="/dashboard/campaigns/new"
+          className="font-cinzel text-[0.78rem] tracking-[0.12em] uppercase text-canvas bg-gold px-7 py-3 no-underline inline-block"
+        >
+          + {t("create")}
         </Link>
       </div>
 
       {/* Lista */}
       {campaigns.length > 0 ? (
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: "1.5rem",
-        }}>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-6">
           {campaigns.map((campaign) => (
-            <Link key={campaign.id} href={`/dashboard/campaigns/${campaign.id}`} style={{
-              display: "block", padding: "2rem",
-              background: "rgba(58,50,40,0.4)",
-              border: "1px solid rgba(201,168,76,0.12)",
-              textDecoration: "none",
-              transition: "background 0.2s, border-color 0.2s",
-              position: "relative",
-            }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(58,50,40,0.7)";
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(201,168,76,0.3)";
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(58,50,40,0.4)";
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(201,168,76,0.12)";
-              }}
-            >
-              {/* Status badge */}
-              <div style={{
-                position: "absolute", top: "1.2rem", right: "1.2rem",
-                fontFamily: "var(--font-cinzel), serif",
-                fontSize: "0.6rem", letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: statusColor[campaign.status] ?? "var(--text-muted)",
-              }}>
-                ● {statusLabel[campaign.status] ?? campaign.status}
-              </div>
+            <Card key={campaign.id} className="p-0 border-0 bg-transparent">
+              <Link
+                href={`/dashboard/campaigns/${campaign.id}`}
+                className="block no-underline bg-surface/40 border border-gold/10 hover:bg-surface/70 hover:border-gold/30 transition-all duration-200 p-8 relative"
+              >
+                {/* Status badge */}
+                <Badge
+                  variant="outline"
+                  className="absolute top-5 right-5 font-cinzel text-[0.6rem] tracking-[0.15em] uppercase border-transparent bg-transparent px-0"
+                  style={{ color: statusColor[campaign.status] ?? "var(--text-muted)" }}
+                >
+                  ● {statusLabel[campaign.status] ?? campaign.status}
+                </Badge>
 
-              <h3 style={{
-                fontFamily: "'Cinzel Decorative', serif",
-                fontSize: "1.1rem", color: "var(--gold-light)",
-                marginBottom: "0.8rem", lineHeight: 1.3,
-              }}>
-                {campaign.name}
-              </h3>
+                <h3 className="font-cinzel-dec text-[1.1rem] text-gold-subtle mb-3 leading-snug">
+                  {campaign.name}
+                </h3>
 
-              {campaign.description && (
-                <p style={{
-                  fontSize: "0.9rem", fontStyle: "italic",
-                  color: "var(--parchment-deeper)", lineHeight: 1.6,
-                  marginBottom: "1.2rem",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                }}>
-                  {campaign.description}
-                </p>
-              )}
+                {campaign.description && (
+                  <p className="text-[0.9rem] italic text-prose-soft leading-relaxed mb-5 line-clamp-2">
+                    {campaign.description}
+                  </p>
+                )}
 
-              <div style={{
-                display: "flex", alignItems: "center",
-                justifyContent: "space-between",
-                paddingTop: "1rem",
-                borderTop: "1px solid rgba(201,168,76,0.08)",
-              }}>
-                <span style={{
-                  fontFamily: "var(--font-cinzel), serif",
-                  fontSize: "0.7rem", color: "var(--text-muted)",
-                  letterSpacing: "0.05em",
-                }}>
-                  {campaign.current_players}/{campaign.max_players} jugadores
-                </span>
-                <span style={{
-                  fontFamily: "var(--font-cinzel), serif",
-                  fontSize: "0.65rem", letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: campaign.is_public ? "var(--gold-dark)" : "var(--text-muted)",
-                  background: campaign.is_public ? "rgba(201,168,76,0.08)" : "rgba(255,255,255,0.04)",
-                  padding: "0.3rem 0.7rem",
-                  border: `1px solid ${campaign.is_public ? "rgba(201,168,76,0.2)" : "rgba(255,255,255,0.06)"}`,
-                }}>
-                  {campaign.is_public ? "Pública" : "Privada"}
-                </span>
-              </div>
-
-              {!campaign.is_public && campaign.invite_code && (
-                <div style={{
-                  marginTop: "0.8rem",
-                  fontFamily: "var(--font-cinzel), serif",
-                  fontSize: "0.65rem", letterSpacing: "0.2em",
-                  color: "var(--text-muted)",
-                }}>
-                  Código: <span style={{ color: "var(--gold-dark)" }}>{campaign.invite_code}</span>
+                <div className="flex items-center justify-between pt-4 border-t border-gold/[0.08]">
+                  <span className="font-cinzel text-[0.7rem] text-prose-muted tracking-[0.05em]">
+                    {campaign.current_players}/{campaign.max_players} {t("players")}
+                  </span>
+                  <Badge
+                    variant="outline"
+                    className={
+                      campaign.is_public
+                        ? "font-cinzel text-[0.65rem] tracking-[0.1em] uppercase text-gold-dim bg-gold/[0.08] border-gold/20"
+                        : "font-cinzel text-[0.65rem] tracking-[0.1em] uppercase text-prose-muted bg-white/[0.04] border-white/[0.06]"
+                    }
+                  >
+                    {campaign.is_public ? t("public") : t("private")}
+                  </Badge>
                 </div>
-              )}
-            </Link>
+
+                {!campaign.is_public && campaign.invite_code && (
+                  <div className="mt-3 font-cinzel text-[0.65rem] tracking-[0.2em] text-prose-muted">
+                    Código: <span className="text-gold-dim">{campaign.invite_code}</span>
+                  </div>
+                )}
+              </Link>
+            </Card>
           ))}
         </div>
       ) : (
-        <div style={{
-          padding: "5rem 2rem", textAlign: "center",
-          background: "rgba(58,50,40,0.2)",
-          border: "1px dashed rgba(201,168,76,0.12)",
-        }}>
-          <p style={{
-            fontFamily: "'Cinzel Decorative', serif",
-            fontSize: "1.2rem", color: "var(--gold-dark)",
-            marginBottom: "1rem",
-          }}>
-            El libro está vacío
+        <div className="py-20 px-8 text-center bg-surface/20 border border-dashed border-gold/[0.12]">
+          <p className="font-cinzel-dec text-[1.2rem] text-gold-dim mb-4">
+            {t("empty")}
           </p>
-          <p style={{
-            fontSize: "1rem", fontStyle: "italic",
-            color: "var(--text-muted)", marginBottom: "2rem",
-          }}>
-            Aún no has creado ninguna campaña. ¡Empieza tu primera historia!
+          <p className="text-[1rem] italic text-prose-muted mb-8">
+            {t("emptyHint")}
           </p>
-          <Link href="/dashboard/campaigns/new" style={{
-            fontFamily: "var(--font-cinzel), serif",
-            fontSize: "0.8rem", letterSpacing: "0.15em",
-            textTransform: "uppercase", color: "var(--ink)",
-            background: "var(--gold)", padding: "0.8rem 2rem",
-            textDecoration: "none", display: "inline-block",
-          }}>
-            Crear Primera Campaña
+          <Link
+            href="/dashboard/campaigns/new"
+            className="font-cinzel text-[0.8rem] tracking-[0.15em] uppercase text-canvas bg-gold px-8 py-3 no-underline inline-block"
+          >
+            + {t("create")}
           </Link>
         </div>
       )}

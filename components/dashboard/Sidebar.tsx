@@ -2,11 +2,25 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 import { createClient } from "@/lib/supabase";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-const navItems = [
+interface NavItem {
+  key: string;
+  href: string;
+  icon: React.ReactNode;
+}
+
+const navItems: NavItem[] = [
   {
-    label: "Dashboard",
+    key: "dashboard",
     href: "/dashboard",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -18,7 +32,7 @@ const navItems = [
     ),
   },
   {
-    label: "Mis Personajes",
+    key: "characters",
     href: "/dashboard/characters",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -28,7 +42,7 @@ const navItems = [
     ),
   },
   {
-    label: "Mis Campañas",
+    key: "campaigns",
     href: "/dashboard/campaigns",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -38,7 +52,7 @@ const navItems = [
     ),
   },
   {
-    label: "Buscar Campañas",
+    key: "explore",
     href: "/dashboard/explore",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -48,7 +62,7 @@ const navItems = [
     ),
   },
   {
-    label: "Dados",
+    key: "dice",
     href: "/dashboard/dice",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -59,7 +73,7 @@ const navItems = [
     ),
   },
   {
-    label: "Mapas",
+    key: "maps",
     href: "/dashboard/maps",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -70,7 +84,7 @@ const navItems = [
     ),
   },
   {
-    label: "Bestiario",
+    key: "bestiary",
     href: "/dashboard/bestiary",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -83,7 +97,7 @@ const navItems = [
     ),
   },
   {
-    label: "Grimorio",
+    key: "spellbook",
     href: "/dashboard/spellbook",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -101,6 +115,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
+  const t = useTranslations("sidebar");
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -116,52 +131,92 @@ export default function Sidebar() {
           Tavern<span className="text-prose">Ledger</span>
         </Link>
         <p className="font-cinzel text-[0.6rem] tracking-[0.2em] text-prose-muted uppercase mt-1">
-          Panel del Aventurero
+          {t("tagline")}
         </p>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 py-6 overflow-y-auto">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-6 py-3 no-underline border-l-2 transition-all duration-200 font-cinzel text-[0.75rem] tracking-[0.08em] ${
-                isActive
-                  ? "text-gold bg-gold/8 border-gold"
-                  : "text-prose-soft border-transparent opacity-60 hover:opacity-100"
-              }`}
-            >
-              <span>{item.icon}</span>
-              {item.label}
-            </Link>
-          );
-        })}
+        <TooltipProvider delay={400}>
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Tooltip key={item.href}>
+                <TooltipTrigger
+                  render={
+                    <Link
+                      href={item.href}
+                      className={`relative flex items-center gap-3 px-6 py-3 no-underline transition-all duration-200 font-cinzel text-[0.75rem] tracking-[0.08em] overflow-hidden ${
+                        isActive
+                          ? "text-gold bg-gold/8"
+                          : "text-prose-soft opacity-60 hover:opacity-100"
+                      }`}
+                    />
+                  }
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="sidebar-active"
+                      className="absolute left-0 top-0 bottom-0 w-[2px] bg-gold"
+                      transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                    />
+                  )}
+                  <span>{item.icon}</span>
+                  {t(item.key)}
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>{t(item.key)}</p>
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </TooltipProvider>
       </nav>
 
       {/* Footer */}
       <div className="px-6 py-6 border-t border-gold/10">
-        <Link href="/dashboard/settings" className="flex items-center gap-3 px-3 py-3 text-prose-soft no-underline font-cinzel text-[0.75rem] tracking-[0.08em] mb-2 hover:text-gold transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-          Configuración
-        </Link>
+        <TooltipProvider delay={400}>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Link
+                  href="/dashboard/settings"
+                  className="flex items-center gap-3 px-3 py-3 text-prose-soft no-underline font-cinzel text-[0.75rem] tracking-[0.08em] mb-2 hover:text-gold transition-colors"
+                />
+              }
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+              </svg>
+              {t("settings")}
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>{t("settings")}</p>
+            </TooltipContent>
+          </Tooltip>
 
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-3 w-full text-blood-ui bg-transparent border-none font-cinzel text-[0.75rem] tracking-[0.08em] cursor-pointer text-left hover:text-blood-ui/80 transition-colors"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" y1="12" x2="9" y2="12"/>
-          </svg>
-          Cerrar Sesión
-        </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-3 px-3 py-3 w-full text-blood-ui bg-transparent border-none font-cinzel text-[0.75rem] tracking-[0.08em] cursor-pointer text-left hover:text-blood-ui/80 transition-colors"
+                />
+              }
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              {t("logout")}
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>{t("logout")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </aside>
   );

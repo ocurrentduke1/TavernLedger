@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import UploadMapImage from "@/components/dashboard/maps/UploadMapImage";
@@ -12,7 +12,7 @@ interface Campaign {
   name: string;
 }
 
-export default function NewMapPage() {
+function NewMapForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialCampaignId = searchParams.get("campaign_id");
@@ -239,5 +239,13 @@ export default function NewMapPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function NewMapPage() {
+  return (
+    <Suspense fallback={<div className="flex-1 pl-60 min-h-screen bg-canvas" />}>
+      <NewMapForm />
+    </Suspense>
   );
 }
